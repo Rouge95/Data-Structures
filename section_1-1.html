@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic HTML Page</title>
+</head>
+
+<body>
+    <div id="header"></div>
+
+    <main>
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="index.html">Index</a> &gt;
+            <span>Unit 2: Array-Based Lists</span>
+        </nav>
+
+        <div class="content">
+            <h1>Unit 2: Array-Based Lists</h1>
+            <p></p>
+            <hr>
+        </div>
+
+        <div id="content">
+            <h2>Pseudocode: Implementing a List Interface</h2>
+            <ul>
+                <li><strong>Define the class:</strong> MyList implements List</li>
+                <li><strong>Internal storage:</strong>
+                    <ul>
+                        <li>Declare storage (array or linked structure)</li>
+                        <li>Declare size = 0</li>
+                    </ul>
+                </li>
+                <li class="method">add(element):
+                    <ul>
+                        <li>If storage is full, expand storage</li>
+                        <li>Insert element at next index</li>
+                        <li>Increment size</li>
+                    </ul>
+                </li>
+                <li class="method">get(index):
+                    <ul>
+                        <li>If index &lt; 0 or &gt;= size, throw error</li>
+                        <li>Return element at index</li>
+                    </ul>
+                </li>
+                <li class="method">remove(index):
+                    <ul>
+                        <li>If index &lt; 0 or &gt;= size, throw error</li>
+                        <li>Shift elements after index left by 1</li>
+                        <li>Decrement size</li>
+                    </ul>
+                </li>
+                <li class="method">size():
+                    <ul>
+                        <li>Return current size</li>
+                    </ul>
+                </li>
+                <li class="method">contains(element):
+                    <ul>
+                        <li>Loop through storage</li>
+                        <li>If element matches, return true</li>
+                        <li>Else return false</li>
+                    </ul>
+                </li>
+                <li class="method">Optional methods:
+                    <ul>
+                        <li>isEmpty(): Return size == 0</li>
+                        <li>clear(): Remove all elements, set size = 0</li>
+                        <li>indexOf(element): Return index if found, else -1</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h2>C Implementation (No Stdlib)</h2>
+            <pre><code class="language-c">
+// C: Simple List Implementation (Array-based, no stdlib)
+#define MAX_SIZE 100
+
+typedef struct {
+    int data[MAX_SIZE];
+    int size;
+} MyList;
+
+// Initialize list
+void initList(MyList* list) {
+    list->size = 0;
+}
+
+// Add element
+void add(MyList* list, int element) {
+    if(list->size < MAX_SIZE) {
+        list->data[list->size] = element;
+        list->size++;
+    }
+}
+
+// Get element
+int get(MyList* list, int index) {
+    if(index >= 0 && index < list->size) {
+        return list->data[index];
+    }
+    return -1; // Error handling
+}
+
+// Remove element
+void removeAt(MyList* list, int index) {
+    if(index >= 0 && index < list->size) {
+        for(int i = index; i < list->size - 1; i++) {
+            list->data[i] = list->data[i + 1];
+        }
+        list->size--;
+    }
+}
+
+// Check if list contains element
+int contains(MyList* list, int element) {
+    for(int i = 0; i < list->size; i++) {
+        if(list->data[i] == element) return 1;
+    }
+    return 0;
+}
+
+// Size
+int size(MyList* list) {
+    return list->size;
+}
+            </code></pre>
+
+            <h2>Java Implementation</h2>
+            <pre><code class="language-java">
+// Java: Simple List Implementation (Array-based)
+class MyList<E> {
+    private Object[] data;
+    private int size;
+    private static final int CAPACITY = 100;
+
+    public MyList() {
+        data = new Object[CAPACITY];
+        size = 0;
+    }
+
+    public void add(E element) {
+        if(size < CAPACITY) {
+            data[size] = element;
+            size++;
+        }
+    }
+
+    public E get(int index) {
+        if(index >= 0 && index < size) {
+            return (E) data[index];
+        }
+        throw new IndexOutOfBoundsException();
+    }
+
+    public void remove(int index) {
+        if(index >= 0 && index < size) {
+            for(int i = index; i < size - 1; i++) {
+                data[i] = data[i + 1];
+            }
+            size--;
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    public int size() { return size; }
+
+    public boolean contains(E element) {
+        for(int i = 0; i < size; i++) {
+            if(data[i].equals(element)) return true;
+        }
+        return false;
+    }
+
+    public void clear() { size = 0; }
+
+    public boolean isEmpty() { return size == 0; }
+
+    public int indexOf(E element) {
+        for(int i = 0; i < size; i++) {
+            if(data[i].equals(element)) return i;
+        }
+        return -1;
+    }
+}
+            </code></pre>
+
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <!-- Highlight.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <script>
+        // Load header
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('header').innerHTML = data);
+
+        // Load footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer').innerHTML = data);
+    </script>
+</body>
+
+</html>
