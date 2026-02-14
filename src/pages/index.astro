@@ -1,11 +1,73 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const pageTitle = "Rouge95's Notes";
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title={pageTitle}>
+  <main class="max-w-4xl mx-auto p-6">
+    <!-- About Section -->
+    <div class="content mb-6">
+      <h2
+        class="text-2xl font-semibold mb-2"
+      >
+        About This Page
+      </h2>
+      <p class="mb-4">
+        Computer Science 272: Data
+        Structures and Algorithms builds
+        on the concepts introduced in
+        COMP 268 or COMP 206 and shows
+        how to use data structures as
+        tools to design computer
+        programs that will cope with the
+        complexity of actual
+        applications.
+      </p>
+      <hr />
+    </div>
+
+    <!-- Sections Navigation -->
+    <nav class="section-list">
+      <ul
+        class="list-disc list-inside space-y-1"
+      >
+        <li>
+          <a
+            href="/sections/unit_2"
+            class="text-blue-600 hover:underline"
+            >Unit 2: Array-Based Lists</a
+          >
+        </li>
+        <li>
+          <a
+            href="/sections/section_1-2"
+            class="text-blue-600 hover:underline"
+            >Section 1-2</a
+          >
+        </li>
+        <li>
+          <a
+            href="/sections/section_1-3"
+            class="text-blue-600 hover:underline"
+            >Section 1-3</a
+          >
+        </li>
+        <li>
+          <a
+            href="/sections/section_2-1"
+            class="text-blue-600 hover:underline"
+            >Section 2-1</a
+          >
+        </li>
+        <li>
+          <a
+            href="/sections/section_2-2"
+            class="text-blue-600 hover:underline"
+            >Section 2-2</a
+          >
+        </li>
+      </ul>
+    </nav>
+  </main>
+</BaseLayout>
