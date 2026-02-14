@@ -1,7 +1,9 @@
 ---
+// Page frontmatter
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const pageTitle = "Rouge95's Notes";
+const base = Astro.base; // get the base URL
 ---
 
 <BaseLayout title={pageTitle}>
@@ -34,12 +36,13 @@ const pageTitle = "Rouge95's Notes";
       >
         <li>
           <a
-            href={`${Astro.base}/sections/unit_2`}
+            href={`${base}sections/unit_2`}
             class="text-blue-600 hover:underline"
-            >Unit 2: Array-Based Lists</a
           >
+            Unit 2: Array-Based Lists
+          </a>
         </li>
       </ul>
     </nav>
-  </main>
-</BaseLayout>
+  </main></BaseLayout
+>
