@@ -1,1 +1,81 @@
 @import "tailwindcss";
+
+:root {
+  --color-primary: #ea6100;
+  --color-primary-light: #f97316;
+  --color-primary-dark: #c2410c;
+  --color-secondary: #78350f;
+  --color-accent: #fbbf24;
+
+  --color-background: #fef7ed;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f9fafb;
+
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+
+  --color-border: #e5e7eb;
+  --color-border-light: #f3f4f6;
+
+  --shadow-sm: 0 1px 2px 0
+    rgb(0 0 0 / 0.05);
+  --shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+  /* ダークモードの色 */
+  --color-primary: #f97316;
+  --color-primary-light: #fb923c;
+  --color-primary-dark: #ea6100;
+  --color-secondary: #fbbf24;
+  --color-accent: #f59e0b;
+
+  --color-background: #0f0f0f;
+  --color-surface: #1f1f1f;
+  --color-surface-alt: #2a2a2a;
+
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #d1d5db;
+  --color-text-muted: #9ca3af;
+
+  --color-border: #374151;
+  --color-border-light: #4b5563;
+
+  --shadow-sm: 0 1px 2px 0
+    rgb(0 0 0 / 0.25);
+  --shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.25),
+    0 2px 4px -2px rgb(0 0 0 / 0.25);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.25),
+    0 4px 6px -4px rgb(0 0 0 / 0.25);
+}
+
+/* Background styles */
+.bg-surface {
+  background-color: var(
+    --color-surface
+  );
+}
+
+.bg-surface-alt {
+  background-color: var(
+    --color-surface-alt
+  );
+}
+
+.border-color {
+  border-color: var(--color-border);
+}
+
+.border-light {
+  border-color: var(
+    --color-border-light
+  );
+}
