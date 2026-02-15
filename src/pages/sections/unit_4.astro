@@ -1,0 +1,279 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle = "Unit 3: Skip Lists";
+const unit = "Unit 3";
+---
+
+<BaseLayout
+  title={pageTitle}
+  unit={unit}
+>
+  <h1 class="text-3xl font-bold mb-4">
+    {pageTitle}
+  </h1>
+  <hr class="mb-6" />
+
+  <!-- Skip List Overview -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      Pseudocode: Skip List
+    </summary>
+    <ul
+      class="list-disc list-inside mt-2 space-y-1"
+    >
+      <li>
+        <strong>Define node:</strong>
+        value, forward[]
+      </li>
+      <li>
+        <strong>Define class:</strong>
+        SkipList
+      </li>
+      <li>
+        <strong>Maintain:</strong>
+        head node, maxLevel, currentLevel
+      </li>
+
+      <li class="method">
+        <strong>randomLevel():</strong>
+        <ul
+          class="list-circle list-inside ml-4"
+        >
+          <li>level = 0</li>
+          <li>
+            While random() &lt; 0.5 and
+            level &lt; maxLevel
+          </li>
+          <li>Increment level</li>
+          <li>Return level</li>
+        </ul>
+      </li>
+
+      <li class="method">
+        <strong>search(value):</strong>
+        <ul
+          class="list-circle list-inside ml-4"
+        >
+          <li>
+            Start at highest level
+          </li>
+          <li>
+            Move forward while next
+            value &lt; target
+          </li>
+          <li>Drop down a level</li>
+          <li>Return true if found</li>
+        </ul>
+      </li>
+
+      <li class="method">
+        <strong>insert(value):</strong>
+        <ul
+          class="list-circle list-inside ml-4"
+        >
+          <li>Track update[] path</li>
+          <li>Generate random level</li>
+          <li>
+            Insert node at each level
+          </li>
+          <li>
+            Adjust currentLevel if
+            needed
+          </li>
+        </ul>
+      </li>
+
+      <li class="method">
+        <strong>remove(value):</strong>
+        <ul
+          class="list-circle list-inside ml-4"
+        >
+          <li>Track update[] path</li>
+          <li>
+            Re-link forward pointers
+          </li>
+          <li>
+            Decrease currentLevel if top
+            becomes empty
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </details>
+
+  <!-- C Implementation -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      C Implementation - Skip List
+    </summary>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
+{`
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+
+#define MAX_LEVEL 6
+#define P 0.5
+
+typedef struct Node {
+    int value;
+    struct Node* forward[MAX_LEVEL + 1];
+} Node;
+
+typedef struct {
+    int level;
+    Node* header;
+} SkipList;
+
+int randomLevel() {
+    int level = 0;
+    while ((rand() / (double)RAND_MAX) < P && level < MAX_LEVEL)
+        level++;
+    return level;
+}
+
+Node* createNode(int value, int level) {
+    Node* node = (Node*)malloc(sizeof(Node));
+    node->value = value;
+    for(int i=0;i<=MAX_LEVEL;i++)
+        node->forward[i] = NULL;
+    return node;
+}
+
+void initSkipList(SkipList* list) {
+    list->level = 0;
+    list->header = createNode(-1, MAX_LEVEL);
+}
+
+void insert(SkipList* list, int value) {
+    Node* update[MAX_LEVEL+1];
+    Node* x = list->header;
+
+    for(int i=list->level;i>=0;i--) {
+        while(x->forward[i] && x->forward[i]->value < value)
+            x = x->forward[i];
+        update[i] = x;
+    }
+
+    x = x->forward[0];
+
+    if(x == NULL || x->value != value) {
+        int lvl = randomLevel();
+        if(lvl > list->level) {
+            for(int i=list->level+1;i<=lvl;i++)
+                update[i] = list->header;
+            list->level = lvl;
+        }
+
+        x = createNode(value, lvl);
+        for(int i=0;i<=lvl;i++) {
+            x->forward[i] = update[i]->forward[i];
+            update[i]->forward[i] = x;
+        }
+    }
+}
+
+int search(SkipList* list, int value) {
+    Node* x = list->header;
+    for(int i=list->level;i>=0;i--) {
+        while(x->forward[i] && x->forward[i]->value < value)
+            x = x->forward[i];
+    }
+    x = x->forward[0];
+    return (x && x->value == value);
+}
+`}
+</code></pre>
+  </details>
+
+  <!-- Java Implementation -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      Java Implementation - Skip List
+    </summary>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-java">
+{`
+import java.util.Random;
+
+class SkipList {
+    static class Node {
+        int value;
+        Node[] forward;
+        Node(int value, int level) {
+            this.value = value;
+            forward = new Node[level + 1];
+        }
+    }
+
+    private static final int MAX_LEVEL = 6;
+    private static final double P = 0.5;
+    private final Node header = new Node(-1, MAX_LEVEL);
+    private int level = 0;
+    private final Random rand = new Random();
+
+    private int randomLevel() {
+        int lvl = 0;
+        while(rand.nextDouble() < P && lvl < MAX_LEVEL)
+            lvl++;
+        return lvl;
+    }
+
+    public void insert(int value) {
+        Node[] update = new Node[MAX_LEVEL+1];
+        Node x = header;
+
+        for(int i=level;i>=0;i--) {
+            while(x.forward[i] != null &&
+                  x.forward[i].value < value)
+                x = x.forward[i];
+            update[i] = x;
+        }
+
+        x = x.forward[0];
+
+        if(x == null || x.value != value) {
+            int lvl = randomLevel();
+            if(lvl > level) {
+                for(int i=level+1;i<=lvl;i++)
+                    update[i] = header;
+                level = lvl;
+            }
+
+            Node newNode = new Node(value, lvl);
+            for(int i=0;i<=lvl;i++) {
+                newNode.forward[i] = update[i].forward[i];
+                update[i].forward[i] = newNode;
+            }
+        }
+    }
+
+    public boolean search(int value) {
+        Node x = header;
+        for(int i=level;i>=0;i--) {
+            while(x.forward[i] != null &&
+                  x.forward[i].value < value)
+                x = x.forward[i];
+        }
+        x = x.forward[0];
+        return x != null && x.value == value;
+    }
+}
+`}
+</code></pre>
+  </details>
+</BaseLayout>
