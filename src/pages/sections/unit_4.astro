@@ -23,87 +23,39 @@ const unit = "Unit 3";
     >
       Pseudocode: Skip List
     </summary>
-    <ul
-      class="list-disc list-inside mt-2 space-y-1"
-    >
-      <li>
-        <strong>Define node:</strong>
-        value, forward[]
-      </li>
-      <li>
-        <strong>Define class:</strong>
-        SkipList
-      </li>
-      <li>
-        <strong>Maintain:</strong>
-        head node, maxLevel, currentLevel
-      </li>
-
-      <li class="method">
-        <strong>randomLevel():</strong>
-        <ul
-          class="list-circle list-inside ml-4"
-        >
-          <li>level = 0</li>
-          <li>
-            While random() &lt; 0.5 and
-            level &lt; maxLevel
-          </li>
-          <li>Increment level</li>
-          <li>Return level</li>
-        </ul>
-      </li>
-
-      <li class="method">
-        <strong>search(value):</strong>
-        <ul
-          class="list-circle list-inside ml-4"
-        >
-          <li>
-            Start at highest level
-          </li>
-          <li>
-            Move forward while next
-            value &lt; target
-          </li>
-          <li>Drop down a level</li>
-          <li>Return true if found</li>
-        </ul>
-      </li>
-
-      <li class="method">
-        <strong>insert(value):</strong>
-        <ul
-          class="list-circle list-inside ml-4"
-        >
-          <li>Track update[] path</li>
-          <li>Generate random level</li>
-          <li>
-            Insert node at each level
-          </li>
-          <li>
-            Adjust currentLevel if
-            needed
-          </li>
-        </ul>
-      </li>
-
-      <li class="method">
-        <strong>remove(value):</strong>
-        <ul
-          class="list-circle list-inside ml-4"
-        >
-          <li>Track update[] path</li>
-          <li>
-            Re-link forward pointers
-          </li>
-          <li>
-            Decrease currentLevel if top
-            becomes empty
-          </li>
-        </ul>
-      </li>
-    </ul>
+    <p>
+      <i
+        >The probability factor controls
+        how tall nodes become. In a skip
+        list: Every node starts at level
+        0. It may get promoted to higher
+        levels. Promotion happens
+        randomly. P determines how often
+        that promotion happens.</i
+      >
+    </p>
+    <hr />
+    <p>
+      Level 3: 20 ─────────────► 40 <br
+      />
+      Level 2: 20 ─────────────► 40 <br
+      />
+      Level 1: 20 ──► 30 ─────► 40 <br
+      />
+      Level 0: 20 ──► 30 ─────► 40 <br
+      />Now: <br />20.forward[3] → 40 <br
+      />20.forward[2] → 40 20.forward[1]
+      → 30<br /> 20.forward[0] → 30<br
+      />
+    </p>
+    <hr /><br />
+    <iframe
+      width="315"
+      height="576"
+      src="https://www.youtube.com/embed/ypod5jeYzAU"
+      title="Skip List | Set 1 (Introduction) | GeeksforGeeks"
+      frameborder="0"
+      allowfullscreen></iframe>
   </details>
 
   <!-- C Implementation -->
@@ -122,74 +74,96 @@ const unit = "Unit 3";
 #include <stdio.h>
 #include <time.h>
 
-#define MAX_LEVEL 6
-#define P 0.5
+#define MAX_LEVEL 6      // Maximum height of the skip list
+#define P 0.5            // Probability factor for level generation
 
+// Node structure: contains value and forward pointers for each level
 typedef struct Node {
     int value;
-    struct Node* forward[MAX_LEVEL + 1];
+    struct Node* forward[MAX_LEVEL + 1]; //! Each node stores pointers to the next greater value at that level.
 } Node;
 
+// SkipList structure: tracks current highest level and header node
 typedef struct {
-    int level;
-    Node* header;
+    int level;           // Current highest level in use
+    Node* header;        // Sentinel head node
 } SkipList;
 
+// Randomly generate a level using probability P
 int randomLevel() {
     int level = 0;
     while ((rand() / (double)RAND_MAX) < P && level < MAX_LEVEL)
-        level++;
+        level++;         // Increase level with probability P
     return level;
 }
 
+// Create a new node with given value
 Node* createNode(int value, int level) {
     Node* node = (Node*)malloc(sizeof(Node));
     node->value = value;
-    for(int i=0;i<=MAX_LEVEL;i++)
+
+    // Initialize all forward pointers to NULL
+    for(int i = 0; i <= MAX_LEVEL; i++)
         node->forward[i] = NULL;
+
     return node;
 }
 
+// Initialize skip list
 void initSkipList(SkipList* list) {
-    list->level = 0;
-    list->header = createNode(-1, MAX_LEVEL);
+    list->level = 0;                         // Start at level 0
+    list->header = createNode(-1, MAX_LEVEL); // Sentinel node
 }
 
+// Insert value into skip list
 void insert(SkipList* list, int value) {
-    Node* update[MAX_LEVEL+1];
+    Node* update[MAX_LEVEL + 1]; // Previous nodes to rewire into. If we stored copies of nodes, modifying them wouldn’t affect the list.
     Node* x = list->header;
 
-    for(int i=list->level;i>=0;i--) {
+    // Start from highest level and move down
+    for(int i = list->level; i >= 0; i--) {
         while(x->forward[i] && x->forward[i]->value < value)
-            x = x->forward[i];
-        update[i] = x;
+            x = x->forward[i];   // Move forward at current level
+        update[i] = x;           // Save node before insertion point
     }
 
     x = x->forward[0];
 
+    // Insert only if value not already present
     if(x == NULL || x->value != value) {
         int lvl = randomLevel();
+
+        // If new level is higher, initialize update references
         if(lvl > list->level) {
-            for(int i=list->level+1;i<=lvl;i++)
+            for(int i = list->level + 1; i <= lvl; i++)
                 update[i] = list->header;
             list->level = lvl;
         }
 
+        // Create new node
         x = createNode(value, lvl);
-        for(int i=0;i<=lvl;i++) {
+
+        // Re-link pointers at each level
+        for(int i = 0; i <= lvl; i++) {
             x->forward[i] = update[i]->forward[i];
             update[i]->forward[i] = x;
         }
     }
 }
 
+// Search for a value
 int search(SkipList* list, int value) {
     Node* x = list->header;
-    for(int i=list->level;i>=0;i--) {
+
+    // Traverse from highest level down
+    for(int i = list->level; i >= 0; i--) {
         while(x->forward[i] && x->forward[i]->value < value)
             x = x->forward[i];
     }
+
     x = x->forward[0];
+
+    // Return 1 if found, 0 otherwise
     return (x && x->value == value);
 }
 `}
@@ -210,66 +184,85 @@ int search(SkipList* list, int value) {
 {`
 import java.util.Random;
 
+// Skip List implementation with probabilistic balancing
 class SkipList {
+
+    // Node class stores value and forward references
     static class Node {
         int value;
         Node[] forward;
+
         Node(int value, int level) {
             this.value = value;
-            forward = new Node[level + 1];
+            forward = new Node[level + 1]; // Allocate levels
         }
     }
 
-    private static final int MAX_LEVEL = 6;
-    private static final double P = 0.5;
-    private final Node header = new Node(-1, MAX_LEVEL);
-    private int level = 0;
+    private static final int MAX_LEVEL = 6; // Max height
+    private static final double P = 0.5;    // Probability factor
+
+    private final Node header = new Node(-1, MAX_LEVEL); // Sentinel
+    private int level = 0;                                 // Current highest level
     private final Random rand = new Random();
 
+    // Generate random level
     private int randomLevel() {
         int lvl = 0;
         while(rand.nextDouble() < P && lvl < MAX_LEVEL)
-            lvl++;
+            lvl++;  // Increase height with probability P
         return lvl;
     }
 
+    // Insert a value
     public void insert(int value) {
-        Node[] update = new Node[MAX_LEVEL+1];
+        Node[] update = new Node[MAX_LEVEL + 1];
         Node x = header;
 
-        for(int i=level;i>=0;i--) {
+        // Traverse from top level down
+        for(int i = level; i >= 0; i--) {
             while(x.forward[i] != null &&
                   x.forward[i].value < value)
                 x = x.forward[i];
-            update[i] = x;
+
+            update[i] = x; // Save path
         }
 
         x = x.forward[0];
 
+        // Insert only if not duplicate
         if(x == null || x.value != value) {
             int lvl = randomLevel();
+
+            // If new level exceeds current, adjust header references
             if(lvl > level) {
-                for(int i=level+1;i<=lvl;i++)
+                for(int i = level + 1; i <= lvl; i++)
                     update[i] = header;
                 level = lvl;
             }
 
             Node newNode = new Node(value, lvl);
-            for(int i=0;i<=lvl;i++) {
+
+            // Re-link pointers
+            for(int i = 0; i <= lvl; i++) {
                 newNode.forward[i] = update[i].forward[i];
                 update[i].forward[i] = newNode;
             }
         }
     }
 
+    // Search for a value
     public boolean search(int value) {
         Node x = header;
-        for(int i=level;i>=0;i--) {
+
+        // Traverse levels top-down
+        for(int i = level; i >= 0; i--) {
             while(x.forward[i] != null &&
                   x.forward[i].value < value)
                 x = x.forward[i];
         }
+
         x = x.forward[0];
+
         return x != null && x.value == value;
     }
 }
