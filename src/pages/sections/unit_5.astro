@@ -15,191 +15,7 @@ const unit = "Unit 5";
   </h1>
   <hr class="mb-6" />
 
-  <!-- Hash Functions Overview -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Hash Functions Overview
-    </summary>
-    <p>
-      A hash function converts a key
-      into an index in a table. It
-      should distribute keys uniformly
-      and minimize collisions.
-      Techniques include:
-    </p>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        <b>Division:</b> h(k) = k mod m; simple,
-        may cluster.
-      </li>
-      <li>
-        <b>Multiplication:</b> h(k) = floor(m
-        * frac(k * A)); good distribution.
-      </li>
-      <li>
-        <b>Folding:</b> Split key into parts,
-        sum or combine.
-      </li>
-      <li>
-        <b>Radix transformation:</b> Convert
-        to another base, reduce modulo table
-        size.
-      </li>
-      <li>
-        <b>Digit rearrangement:</b> Reorder
-        digits or bits.
-      </li>
-      <li>
-        <b>Length-dependent:</b> Use key length
-        with content.
-      </li>
-      <li>
-        <b>Mid-square:</b> Square key, take
-        middle digits; good for small keys.
-      </li>
-    </ul>
-  </details>
-
-  <!-- Hash Function Analysis -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Estimating Effectiveness
-    </summary>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        Uniformity: keys spread across
-        table.
-      </li>
-      <li>Minimized collisions.</li>
-      <li>Speed of computation.</li>
-      <li>
-        Independence: small changes in
-        key affect hash.
-      </li>
-      <li>Resistance to patterns.</li>
-    </ul>
-  </details>
-
-  <!-- Hash Function Differentiation -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Differentiating Hash Functions
-    </summary>
-    <table
-      class="table-auto border-collapse border border-gray-300 w-full text-sm"
-    >
-      <thead>
-        <tr>
-          <th class="border px-2 py-1"
-            >Method</th
-          >
-          <th class="border px-2 py-1"
-            >Strengths</th
-          >
-          <th class="border px-2 py-1"
-            >Weaknesses</th
-          >
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="border px-2 py-1"
-            >Division</td
-          >
-          <td class="border px-2 py-1"
-            >Simple, fast</td
-          >
-          <td class="border px-2 py-1"
-            >Clustering if m poorly
-            chosen</td
-          >
-        </tr>
-        <tr>
-          <td class="border px-2 py-1"
-            >Multiplication</td
-          >
-          <td class="border px-2 py-1"
-            >Good distribution</td
-          >
-          <td class="border px-2 py-1"
-            >Requires fractional
-            multiply</td
-          >
-        </tr>
-        <tr>
-          <td class="border px-2 py-1"
-            >Folding</td
-          >
-          <td class="border px-2 py-1"
-            >Works on long numeric keys</td
-          >
-          <td class="border px-2 py-1"
-            >Some bias possible</td
-          >
-        </tr>
-        <tr>
-          <td class="border px-2 py-1"
-            >Radix</td
-          >
-          <td class="border px-2 py-1"
-            >Handles different bases</td
-          >
-          <td class="border px-2 py-1"
-            >Requires conversion</td
-          >
-        </tr>
-        <tr>
-          <td class="border px-2 py-1"
-            >Digit rearrangement</td
-          >
-          <td class="border px-2 py-1"
-            >Obscures patterns</td
-          >
-          <td class="border px-2 py-1"
-            >Slow for large keys</td
-          >
-        </tr>
-        <tr>
-          <td class="border px-2 py-1"
-            >Length-dependent</td
-          >
-          <td class="border px-2 py-1"
-            >Uses key size info</td
-          >
-          <td class="border px-2 py-1"
-            >Weak if lengths similar</td
-          >
-        </tr>
-        <tr>
-          <td class="border px-2 py-1"
-            >Mid-square</td
-          >
-          <td class="border px-2 py-1"
-            >Good randomness for small
-            numbers</td
-          >
-          <td class="border px-2 py-1"
-            >Less effective for large
-            keys</td
-          >
-        </tr>
-      </tbody>
-    </table>
-  </details>
-
-  <!-- Collision Resolution -->
+  <!-- Collision Resolution (Expanded & Applied) -->
   <details
     class="mb-4 border rounded p-4"
   >
@@ -207,51 +23,195 @@ const unit = "Unit 5";
       class="cursor-pointer font-semibold"
     >
       Collision Resolution Techniques
+      (Detailed)
     </summary>
+
+    <p>
+      <b>Collision:</b> Two keys map to the
+      same index: h(k1) = h(k2). CRTs are
+      applied to resolve collisions at the
+      table index level.
+    </p>
+
+    <hr />
+
+    <h4 class="font-semibold mt-3">
+      1. Open Addressing
+    </h4>
+    <p>
+      All data stays inside the array.
+      If a slot is full, probe for
+      another.
+    </p>
     <ul class="list-disc ml-6 mt-2">
       <li>
-        <b>Open addressing:</b>
-        <ul class="list-disc ml-6">
-          <li>
-            Linear probing: i → i+1
-          </li>
-          <li>
-            Quadratic probing: i → i +
-            c1·i² + c2·i²
-          </li>
-          <li>
-            Double hashing: i → i +
-            f(key)
-          </li>
-        </ul>
+        <b>Linear Probing</b>: index =
+        (hash_code + i) % m;
+        cache-friendly; weak: primary
+        clustering.
       </li>
       <li>
-        <b>Separate chaining:</b>
-        <ul class="list-disc ml-6">
-          <li>
-            Linked list at each slot
-          </li>
-          <li>List heads</li>
-          <li>BST or dynamic arrays</li>
-        </ul>
+        <b>Quadratic Probing</b>: index
+        = hash_code + c1·i + c2·i²;
+        reduces primary clustering;
+        weak: secondary clustering.
       </li>
-      <li>Coalesced hashing</li>
-      <li>Robin Hood hashing</li>
-      <li>Cuckoo hashing</li>
-      <li>Hopscotch hashing</li>
-      <li>Dynamic resizing</li>
+      <li>
+        <b>Double Hashing</b>: index =
+        hash_code + i·hash2(key);
+        minimal clustering; more
+        computation.
+      </li>
     </ul>
+
+    <hr />
+
+    <h4 class="font-semibold mt-3">
+      2. Separate Chaining
+    </h4>
+    <p>
+      Each slot stores multiple
+      elements. CRT manages the chain,
+      not the index.
+    </p>
+    <ul class="list-disc ml-6 mt-2">
+      <li>Linked list</li>
+      <li>List heads</li>
+      <li>
+        BST or dynamic array for long
+        chains
+      </li>
+    </ul>
+
+    <hr />
+
+    <h4 class="font-semibold mt-3">
+      3. Coalesced Hashing
+    </h4>
+    <p>
+      Hybrid of chaining + open
+      addressing. Colliding items are
+      linked inside the array.
+    </p>
+
+    <hr />
+
+    <h4 class="font-semibold mt-3">
+      4. Robin Hood Hashing
+    </h4>
+    <p>
+      During insert, the key with longer
+      probe distance swaps with the new
+      key to equalize probe lengths.
+    </p>
+
+    <hr />
+
+    <h4 class="font-semibold mt-3">
+      5. Cuckoo Hashing
+    </h4>
+    <p>
+      Two hash functions → two possible
+      locations. If occupied, displace
+      existing key. Lookup is O(1)
+      worst-case.
+    </p>
+
+    <hr />
+
+    <h4 class="font-semibold mt-3">
+      6. Hopscotch Hashing
+    </h4>
+    <p>
+      Maintains a small neighborhood
+      around each bucket using bitmaps.
+      Very cache-friendly and
+      concurrency-friendly.
+    </p>
+
+    <hr />
+
+    <h4 class="font-semibold mt-3">
+      7. Dynamic Resizing
+    </h4>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        Full resize: Allocate larger
+        table, rehash all elements.
+      </li>
+      <li>
+        Incremental resize: Gradually
+        move elements to avoid long
+        pauses.
+      </li>
+    </ul>
+    <p class="mt-2">
+      <b>Key Rule:</b> Keep load factor α
+      = n / m controlled for performance.
+    </p>
   </details>
 
-  <!-- Hash Table Implementation -->
+  <!-- Implementations -->
   <details
     class="mb-4 border rounded p-4"
   >
     <summary
       class="cursor-pointer font-semibold"
     >
-      Implementing Hash Tables
+      Hash Table Implementations in C
     </summary>
+
+    <!-- Linear Probing -->
+    <h4 class="font-semibold mt-3">
+      1. Open Addressing – Linear
+      Probing
+    </h4>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
+{`
+#include <stdio.h>
+
+#define TABLE_SIZE 10
+#define EMPTY -1
+
+int table[TABLE_SIZE];
+
+int hash(int key) {
+    return key % TABLE_SIZE;
+}
+
+void init() {
+    for(int i = 0; i < TABLE_SIZE; i++)
+        table[i] = EMPTY;
+}
+
+void insert(int key) {
+    int idx = hash(key);
+    for(int i = 0; i < TABLE_SIZE; i++) {
+        int probe = (idx + i) % TABLE_SIZE;
+        if(table[probe] == EMPTY) {
+            table[probe] = key;
+            return;
+        }
+    }
+}
+
+int search(int key) {
+    int idx = hash(key);
+    for(int i = 0; i < TABLE_SIZE; i++) {
+        int probe = (idx + i) % TABLE_SIZE;
+        if(table[probe] == EMPTY) return 0;
+        if(table[probe] == key) return 1;
+    }
+    return 0;
+}
+`}
+</code></pre>
+
+    <!-- Separate Chaining -->
+    <h4 class="font-semibold mt-3">
+      2. Separate Chaining
+    </h4>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
 {`
@@ -262,7 +222,6 @@ const unit = "Unit 5";
 
 typedef struct Node {
     int key;
-    int value;
     struct Node* next;
 } Node;
 
@@ -272,11 +231,10 @@ int hash(int key) {
     return key % TABLE_SIZE;
 }
 
-void insert(int key, int value) {
+void insert(int key) {
     int idx = hash(key);
     Node* newNode = malloc(sizeof(Node));
     newNode->key = key;
-    newNode->value = value;
     newNode->next = table[idx];
     table[idx] = newNode;
 }
@@ -292,66 +250,89 @@ Node* search(int key) {
 }
 `}
 </code></pre>
+
+    <!-- Double Hashing -->
+    <h4 class="font-semibold mt-3">
+      3. Open Addressing – Double
+      Hashing
+    </h4>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
+{`
+#include <stdio.h>
+
+#define TABLE_SIZE 10
+#define EMPTY -1
+
+int table[TABLE_SIZE];
+
+int hash1(int key) { return key % TABLE_SIZE; }
+int hash2(int key) { return 1 + (key % (TABLE_SIZE - 1)); }
+
+void init() {
+    for(int i = 0; i < TABLE_SIZE; i++)
+        table[i] = EMPTY;
+}
+
+void insert(int key) {
+    int idx = hash1(key);
+    int step = hash2(key);
+    for(int i = 0; i < TABLE_SIZE; i++) {
+        int probe = (idx + i * step) % TABLE_SIZE;
+        if(table[probe] == EMPTY) {
+            table[probe] = key;
+            return;
+        }
+    }
+}
+
+int search(int key) {
+    int idx = hash1(key);
+    int step = hash2(key);
+    for(int i = 0; i < TABLE_SIZE; i++) {
+        int probe = (idx + i * step) % TABLE_SIZE;
+        if(table[probe] == EMPTY) return 0;
+        if(table[probe] == key) return 1;
+    }
+    return 0;
+}
+`}
+</code></pre>
   </details>
 
-  <!-- Collision Detection -->
+  <!-- Performance Summary -->
   <details
     class="mb-4 border rounded p-4"
   >
     <summary
       class="cursor-pointer font-semibold"
     >
-      Collision Detection and Analysis
+      Performance Summary
     </summary>
     <ul class="list-disc ml-6 mt-2">
       <li>
-        Check if slot is occupied on
-        insert/search.
+        Separate chaining: Average O(1),
+        worst O(n)
       </li>
       <li>
-        Count collisions to measure hash
-        quality.
+        Open addressing: O(1) if α low
       </li>
       <li>
-        Analyze chain lengths or probe
-        sequences.
+        Cuckoo hashing: O(1) worst-case
+        lookup
       </li>
       <li>
-        Load factor α = n / m; higher α
-        → more collisions.
+        Robin Hood: Lower variance in
+        probe length
+      </li>
+      <li>
+        High load factor → exponential
+        collision growth
       </li>
     </ul>
-  </details>
-
-  <!-- Hash Code Development -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Developing Hash Codes
-    </summary>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        Select function type per key
-        type.
-      </li>
-      <li>
-        Ensure uniform distribution.
-      </li>
-      <li>
-        Test with key patterns to reduce
-        clustering.
-      </li>
-      <li>
-        Combine techniques if needed
-        (e.g., folding + division).
-      </li>
-      <li>
-        Prefer prime table size for
-        division method.
-      </li>
-    </ul>
+    <p class="mt-2">
+      <b>Exam Insight:</b> Always relate performance
+      to load factor (α).
+    </p>
   </details>
 </BaseLayout>
