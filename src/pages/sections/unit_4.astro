@@ -48,6 +48,16 @@ const unit = "Unit 3";
       → 30<br /> 20.forward[0] → 30<br
       />
     </p>
+    <p>
+      randomLevel():<br />
+      Start at level 0 Repeat:<br /> Flip
+      a biased coin with probability P <br
+      />If it succeeds <br />AND we are
+      below MAX_LEVEL: <br />increase
+      level <br />Otherwise: <br />stop
+      Return level
+    </p>
+
     <hr /><br />
     <iframe
       width="315"
@@ -133,9 +143,9 @@ void insert(SkipList* list, int value) {
     if(x == NULL || x->value != value) {
         int lvl = randomLevel();
 
-        // If new level is higher, initialize update references
+        // If new level is higher we plan to wire a new header of that new level
         if(lvl > list->level) {
-            for(int i = list->level + 1; i <= lvl; i++)
+            for(int i = list->level + 1; i <= lvl; i++) 
                 update[i] = list->header;
             list->level = lvl;
         }

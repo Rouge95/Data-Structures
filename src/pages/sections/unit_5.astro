@@ -1,0 +1,357 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle =
+  "Unit 5: Hash Functions and Hash Tables";
+const unit = "Unit 5";
+---
+
+<BaseLayout
+  title={pageTitle}
+  unit={unit}
+>
+  <h1 class="text-3xl font-bold mb-4">
+    {pageTitle}
+  </h1>
+  <hr class="mb-6" />
+
+  <!-- Hash Functions Overview -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      Hash Functions Overview
+    </summary>
+    <p>
+      A hash function converts a key
+      into an index in a table. It
+      should distribute keys uniformly
+      and minimize collisions.
+      Techniques include:
+    </p>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        <b>Division:</b> h(k) = k mod m; simple,
+        may cluster.
+      </li>
+      <li>
+        <b>Multiplication:</b> h(k) = floor(m
+        * frac(k * A)); good distribution.
+      </li>
+      <li>
+        <b>Folding:</b> Split key into parts,
+        sum or combine.
+      </li>
+      <li>
+        <b>Radix transformation:</b> Convert
+        to another base, reduce modulo table
+        size.
+      </li>
+      <li>
+        <b>Digit rearrangement:</b> Reorder
+        digits or bits.
+      </li>
+      <li>
+        <b>Length-dependent:</b> Use key length
+        with content.
+      </li>
+      <li>
+        <b>Mid-square:</b> Square key, take
+        middle digits; good for small keys.
+      </li>
+    </ul>
+  </details>
+
+  <!-- Hash Function Analysis -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      Estimating Effectiveness
+    </summary>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        Uniformity: keys spread across
+        table.
+      </li>
+      <li>Minimized collisions.</li>
+      <li>Speed of computation.</li>
+      <li>
+        Independence: small changes in
+        key affect hash.
+      </li>
+      <li>Resistance to patterns.</li>
+    </ul>
+  </details>
+
+  <!-- Hash Function Differentiation -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      Differentiating Hash Functions
+    </summary>
+    <table
+      class="table-auto border-collapse border border-gray-300 w-full text-sm"
+    >
+      <thead>
+        <tr>
+          <th class="border px-2 py-1"
+            >Method</th
+          >
+          <th class="border px-2 py-1"
+            >Strengths</th
+          >
+          <th class="border px-2 py-1"
+            >Weaknesses</th
+          >
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border px-2 py-1"
+            >Division</td
+          >
+          <td class="border px-2 py-1"
+            >Simple, fast</td
+          >
+          <td class="border px-2 py-1"
+            >Clustering if m poorly
+            chosen</td
+          >
+        </tr>
+        <tr>
+          <td class="border px-2 py-1"
+            >Multiplication</td
+          >
+          <td class="border px-2 py-1"
+            >Good distribution</td
+          >
+          <td class="border px-2 py-1"
+            >Requires fractional
+            multiply</td
+          >
+        </tr>
+        <tr>
+          <td class="border px-2 py-1"
+            >Folding</td
+          >
+          <td class="border px-2 py-1"
+            >Works on long numeric keys</td
+          >
+          <td class="border px-2 py-1"
+            >Some bias possible</td
+          >
+        </tr>
+        <tr>
+          <td class="border px-2 py-1"
+            >Radix</td
+          >
+          <td class="border px-2 py-1"
+            >Handles different bases</td
+          >
+          <td class="border px-2 py-1"
+            >Requires conversion</td
+          >
+        </tr>
+        <tr>
+          <td class="border px-2 py-1"
+            >Digit rearrangement</td
+          >
+          <td class="border px-2 py-1"
+            >Obscures patterns</td
+          >
+          <td class="border px-2 py-1"
+            >Slow for large keys</td
+          >
+        </tr>
+        <tr>
+          <td class="border px-2 py-1"
+            >Length-dependent</td
+          >
+          <td class="border px-2 py-1"
+            >Uses key size info</td
+          >
+          <td class="border px-2 py-1"
+            >Weak if lengths similar</td
+          >
+        </tr>
+        <tr>
+          <td class="border px-2 py-1"
+            >Mid-square</td
+          >
+          <td class="border px-2 py-1"
+            >Good randomness for small
+            numbers</td
+          >
+          <td class="border px-2 py-1"
+            >Less effective for large
+            keys</td
+          >
+        </tr>
+      </tbody>
+    </table>
+  </details>
+
+  <!-- Collision Resolution -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      Collision Resolution Techniques
+    </summary>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        <b>Open addressing:</b>
+        <ul class="list-disc ml-6">
+          <li>
+            Linear probing: i → i+1
+          </li>
+          <li>
+            Quadratic probing: i → i +
+            c1·i² + c2·i²
+          </li>
+          <li>
+            Double hashing: i → i +
+            f(key)
+          </li>
+        </ul>
+      </li>
+      <li>
+        <b>Separate chaining:</b>
+        <ul class="list-disc ml-6">
+          <li>
+            Linked list at each slot
+          </li>
+          <li>List heads</li>
+          <li>BST or dynamic arrays</li>
+        </ul>
+      </li>
+      <li>Coalesced hashing</li>
+      <li>Robin Hood hashing</li>
+      <li>Cuckoo hashing</li>
+      <li>Hopscotch hashing</li>
+      <li>Dynamic resizing</li>
+    </ul>
+  </details>
+
+  <!-- Hash Table Implementation -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      Implementing Hash Tables
+    </summary>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
+{`
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TABLE_SIZE 10
+
+typedef struct Node {
+    int key;
+    int value;
+    struct Node* next;
+} Node;
+
+Node* table[TABLE_SIZE];
+
+int hash(int key) {
+    return key % TABLE_SIZE;
+}
+
+void insert(int key, int value) {
+    int idx = hash(key);
+    Node* newNode = malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->value = value;
+    newNode->next = table[idx];
+    table[idx] = newNode;
+}
+
+Node* search(int key) {
+    int idx = hash(key);
+    Node* curr = table[idx];
+    while(curr) {
+        if(curr->key == key) return curr;
+        curr = curr->next;
+    }
+    return NULL;
+}
+`}
+</code></pre>
+  </details>
+
+  <!-- Collision Detection -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      Collision Detection and Analysis
+    </summary>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        Check if slot is occupied on
+        insert/search.
+      </li>
+      <li>
+        Count collisions to measure hash
+        quality.
+      </li>
+      <li>
+        Analyze chain lengths or probe
+        sequences.
+      </li>
+      <li>
+        Load factor α = n / m; higher α
+        → more collisions.
+      </li>
+    </ul>
+  </details>
+
+  <!-- Hash Code Development -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+    >
+      Developing Hash Codes
+    </summary>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        Select function type per key
+        type.
+      </li>
+      <li>
+        Ensure uniform distribution.
+      </li>
+      <li>
+        Test with key patterns to reduce
+        clustering.
+      </li>
+      <li>
+        Combine techniques if needed
+        (e.g., folding + division).
+      </li>
+      <li>
+        Prefer prime table size for
+        division method.
+      </li>
+    </ul>
+  </details>
+</BaseLayout>
