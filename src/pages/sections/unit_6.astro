@@ -14,75 +14,6 @@ const unit = "Unit 6";
   </h1>
   <hr class="mb-6" />
 
-  <!-- Learning Outcomes -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Learning Outcomes
-    </summary>
-
-    <ul class="list-disc ml-6 mt-2">
-      <li>Define recursion</li>
-      <li>Trace recursive programs</li>
-      <li>
-        Create recursive solutions
-      </li>
-      <li>
-        Compare recursive vs iterative
-        solutions
-      </li>
-      <li>
-        Estimate time complexity of
-        recursion
-      </li>
-    </ul>
-
-    <p class="mt-3">
-      <b>Key Focus:</b> Base case + recursive
-      case + guaranteed termination.
-    </p>
-  </details>
-
-  <!-- Concept Overview -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Recursion Fundamentals
-    </summary>
-
-    <p>
-      Recursion is a technique where a
-      function solves a problem by
-      calling itself on a smaller
-      subproblem.
-    </p>
-
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        <b>Base Case:</b> Stops recursion
-      </li>
-      <li>
-        <b>Recursive Case:</b> Reduces input
-        size
-      </li>
-      <li>
-        <b>Call Stack:</b> Stores pending
-        calls
-      </li>
-    </ul>
-
-    <p class="mt-3">
-      <b>Exam Insight:</b> If the input does
-      not shrink, the function will not terminate.
-    </p>
-  </details>
-
   <!-- Decimal to Binary -->
   <details
     class="mb-4 border rounded p-4"
@@ -90,16 +21,11 @@ const unit = "Unit 6";
     <summary
       class="cursor-pointer font-semibold"
     >
-      Decimal to Binary (Divide by 2)
+      Decimal to Binary (Recursion)
     </summary>
 
-    <p>
-      Divide by 2 until zero, then print
-      remainders during stack unwinding.
-    </p>
-
     <h4 class="font-semibold mt-3">
-      C Implementation
+      C Implementation (Runnable)
     </h4>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
@@ -114,11 +40,24 @@ void decibinary(int num) {
         printf("%d", num % 2);
     }
 }
+
+int main() {
+    int n = 11;
+    printf("Decimal: %d\\nBinary: ", n);
+    decibinary(n);
+    return 0;
+}
+
+/*
+Output:
+Decimal: 11
+Binary: 1011
+*/
 `}
 </code></pre>
 
     <h4 class="font-semibold mt-3">
-      Java Implementation
+      Java Implementation (Runnable)
     </h4>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-java">
@@ -133,27 +72,21 @@ public class DecimalToBinary {
             System.out.print(num % 2);
         }
     }
+
+    public static void main(String[] args) {
+        int n = 11;
+        System.out.print("Decimal: " + n + "\\nBinary: ");
+        decibinary(n);
+    }
 }
+
+/*
+Output:
+Decimal: 11
+Binary: 1011
+*/
 `}
 </code></pre>
-
-    <hr class="mt-4" />
-    <h4 class="font-semibold mt-3">
-      Runtime Analysis
-    </h4>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        <b>Time Complexity:</b> O(log n)
-      </li>
-      <li>
-        <b>Space Complexity:</b> O(log n)
-      </li>
-    </ul>
-    <p class="mt-2">
-      Each call divides n by 2. Number
-      of calls equals number of bits in
-      n.
-    </p>
   </details>
 
   <!-- Reverse String -->
@@ -167,12 +100,13 @@ public class DecimalToBinary {
     </summary>
 
     <h4 class="font-semibold mt-3">
-      C Implementation
+      C Implementation (Runnable)
     </h4>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
 {`
 #include <stdio.h>
+#include <string.h>
 
 void print_reverse(char ss[], int n) {
     if (n == 1) {
@@ -182,11 +116,24 @@ void print_reverse(char ss[], int n) {
         print_reverse(ss, n-1);
     }
 }
+
+int main() {
+    char str[] = "HELLO";
+    printf("Original: %s\\nReversed: ", str);
+    print_reverse(str, strlen(str));
+    return 0;
+}
+
+/*
+Output:
+Original: HELLO
+Reversed: OLLEH
+*/
 `}
 </code></pre>
 
     <h4 class="font-semibold mt-3">
-      Java Implementation
+      Java Implementation (Runnable)
     </h4>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-java">
@@ -201,25 +148,21 @@ public class ReverseString {
             printReverse(s.substring(0, s.length() - 1));
         }
     }
+
+    public static void main(String[] args) {
+        String str = "HELLO";
+        System.out.print("Original: " + str + "\\nReversed: ");
+        printReverse(str);
+    }
 }
+
+/*
+Output:
+Original: HELLO
+Reversed: OLLEH
+*/
 `}
 </code></pre>
-
-    <hr class="mt-4" />
-    <h4 class="font-semibold mt-3">
-      Runtime Analysis
-    </h4>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        <b>Time Complexity:</b> O(n)
-      </li>
-      <li>
-        <b>Space Complexity:</b> O(n)
-      </li>
-    </ul>
-    <p class="mt-2">
-      One recursive call per character.
-    </p>
   </details>
 
   <!-- Palindrome -->
@@ -233,11 +176,12 @@ public class ReverseString {
     </summary>
 
     <h4 class="font-semibold mt-3">
-      C Implementation
+      C Implementation (Runnable)
     </h4>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
 {`
+#include <stdio.h>
 #include <string.h>
 
 int check(char str[], int len) {
@@ -250,11 +194,27 @@ int check(char str[], int len) {
 
     return 0;
 }
+
+int main() {
+    char str[] = "racecar";
+
+    if (check(str, strlen(str)))
+        printf("%s is a palindrome\\n", str);
+    else
+        printf("%s is NOT a palindrome\\n", str);
+
+    return 0;
+}
+
+/*
+Output:
+racecar is a palindrome
+*/
 `}
 </code></pre>
 
     <h4 class="font-semibold mt-3">
-      Java Implementation
+      Java Implementation (Runnable)
     </h4>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-java">
@@ -270,26 +230,23 @@ public class Palindrome {
 
         return false;
     }
+
+    public static void main(String[] args) {
+        String str = "racecar";
+
+        if (check(str))
+            System.out.println(str + " is a palindrome");
+        else
+            System.out.println(str + " is NOT a palindrome");
+    }
 }
+
+/*
+Output:
+racecar is a palindrome
+*/
 `}
 </code></pre>
-
-    <hr class="mt-4" />
-    <h4 class="font-semibold mt-3">
-      Runtime Analysis
-    </h4>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        <b>Time Complexity:</b> O(n)
-      </li>
-      <li>
-        <b>Space Complexity:</b> O(n)
-      </li>
-    </ul>
-    <p class="mt-2">
-      Input shrinks by 2 each call →
-      linear time.
-    </p>
   </details>
 
   <!-- GCD -->
@@ -303,21 +260,36 @@ public class Palindrome {
     </summary>
 
     <h4 class="font-semibold mt-3">
-      C Implementation
+      C Implementation (Runnable)
     </h4>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
 {`
+#include <stdio.h>
+
 int gcd(int p, int q) {
     if (q == 0)
         return p;
     return gcd(q, p % q);
 }
+
+int main() {
+    int a = 1296;
+    int b = 576;
+
+    printf("GCD(%d, %d) = %d\\n", a, b, gcd(a, b));
+    return 0;
+}
+
+/*
+Output:
+GCD(1296, 576) = 144
+*/
 `}
 </code></pre>
 
     <h4 class="font-semibold mt-3">
-      Java Implementation
+      Java Implementation (Runnable)
     </h4>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-java">
@@ -330,102 +302,19 @@ public class Euclid {
         return gcd(q, p % q);
     }
 
-    public static int gcdIterative(int p, int q) {
-        while (q != 0) {
-            int temp = q;
-            q = p % q;
-            p = temp;
-        }
-        return p;
+    public static void main(String[] args) {
+        int a = 1296;
+        int b = 576;
+
+        System.out.println("GCD(" + a + ", " + b + ") = " + gcd(a, b));
     }
 }
+
+/*
+Output:
+GCD(1296, 576) = 144
+*/
 `}
 </code></pre>
-
-    <hr class="mt-4" />
-    <h4 class="font-semibold mt-3">
-      Runtime Analysis
-    </h4>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        <b>Time Complexity:</b> O(log min(p,q))
-      </li>
-      <li>
-        <b>Space Complexity:</b> O(log min(p,q))
-      </li>
-    </ul>
-    <p class="mt-2">
-      Each step reduces the problem
-      using modulo. Shrinks
-      logarithmically.
-    </p>
-  </details>
-
-  <!-- Time Complexity Videos -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Time Complexity of Recursive
-      Algorithms
-    </summary>
-
-    <div class="mt-4 space-y-6">
-      <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/cBGLEa6WcrQ"
-        frameborder="0"
-        allowfullscreen></iframe>
-
-      <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/oZ0MP5euLQ0"
-        frameborder="0"
-        allowfullscreen></iframe>
-
-      <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/t4mwbA46KF8"
-        frameborder="0"
-        allowfullscreen></iframe>
-
-      <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/agy0GW9-uyM"
-        frameborder="0"
-        allowfullscreen></iframe>
-    </div>
-  </details>
-
-  <!-- References -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      References
-    </summary>
-
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        Barnett & Tongo – Data
-        Structures and Algorithms
-      </li>
-      <li>
-        Robert Sedgewick & Kevin Wayne –
-        Euclid.java
-      </li>
-      <li>
-        YouTube Recurrence Videos
-        (above)
-      </li>
-    </ul>
   </details>
 </BaseLayout>
