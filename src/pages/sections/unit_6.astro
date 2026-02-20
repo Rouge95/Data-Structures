@@ -26,23 +26,23 @@ const unit = "Unit 6";
 
     <ul class="list-disc ml-6 mt-2">
       <li>Define recursion</li>
+      <li>Trace recursive programs</li>
       <li>
-        Inspect recursive programs
+        Create recursive solutions
       </li>
-      <li>Create recursive programs</li>
       <li>
-        Differentiate recursive vs
-        iterative solutions
+        Compare recursive vs iterative
+        solutions
       </li>
       <li>
         Estimate time complexity of
-        recursive programs
+        recursion
       </li>
     </ul>
 
     <p class="mt-3">
-      <b>Key Focus:</b> Base case, recursive
-      case, termination, and recurrence relations.
+      <b>Key Focus:</b> Base case + recursive
+      case + guaranteed termination.
     </p>
   </details>
 
@@ -53,13 +53,14 @@ const unit = "Unit 6";
     <summary
       class="cursor-pointer font-semibold"
     >
-      What is Recursion?
+      Recursion Fundamentals
     </summary>
 
     <p>
       Recursion is a technique where a
-      function calls itself to solve
-      smaller subproblems.
+      function solves a problem by
+      calling itself on a smaller
+      subproblem.
     </p>
 
     <ul class="list-disc ml-6 mt-2">
@@ -67,14 +68,18 @@ const unit = "Unit 6";
         <b>Base Case:</b> Stops recursion
       </li>
       <li>
-        <b>Recursive Case:</b> Reduces problem
+        <b>Recursive Case:</b> Reduces input
         size
+      </li>
+      <li>
+        <b>Call Stack:</b> Stores pending
+        calls
       </li>
     </ul>
 
     <p class="mt-3">
-      <b>Exam Insight:</b> Every recursive
-      solution must shrink toward a base case.
+      <b>Exam Insight:</b> If the input does
+      not shrink, the function will not terminate.
     </p>
   </details>
 
@@ -85,12 +90,12 @@ const unit = "Unit 6";
     <summary
       class="cursor-pointer font-semibold"
     >
-      Decimal to Binary (Recursion)
+      Decimal to Binary (Divide by 2)
     </summary>
 
     <p>
-      Divide by 2 until zero. Print
-      remainders in reverse.
+      Divide by 2 until zero, then print
+      remainders during stack unwinding.
     </p>
 
     <h4 class="font-semibold mt-3">
@@ -131,6 +136,24 @@ public class DecimalToBinary {
 }
 `}
 </code></pre>
+
+    <hr class="mt-4" />
+    <h4 class="font-semibold mt-3">
+      Runtime Analysis
+    </h4>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        <b>Time Complexity:</b> O(log n)
+      </li>
+      <li>
+        <b>Space Complexity:</b> O(log n)
+      </li>
+    </ul>
+    <p class="mt-2">
+      Each call divides n by 2. Number
+      of calls equals number of bits in
+      n.
+    </p>
   </details>
 
   <!-- Reverse String -->
@@ -181,6 +204,22 @@ public class ReverseString {
 }
 `}
 </code></pre>
+
+    <hr class="mt-4" />
+    <h4 class="font-semibold mt-3">
+      Runtime Analysis
+    </h4>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        <b>Time Complexity:</b> O(n)
+      </li>
+      <li>
+        <b>Space Complexity:</b> O(n)
+      </li>
+    </ul>
+    <p class="mt-2">
+      One recursive call per character.
+    </p>
   </details>
 
   <!-- Palindrome -->
@@ -199,7 +238,6 @@ public class ReverseString {
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
 {`
-#include <stdio.h>
 #include <string.h>
 
 int check(char str[], int len) {
@@ -235,6 +273,23 @@ public class Palindrome {
 }
 `}
 </code></pre>
+
+    <hr class="mt-4" />
+    <h4 class="font-semibold mt-3">
+      Runtime Analysis
+    </h4>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        <b>Time Complexity:</b> O(n)
+      </li>
+      <li>
+        <b>Space Complexity:</b> O(n)
+      </li>
+    </ul>
+    <p class="mt-2">
+      Input shrinks by 2 each call →
+      linear time.
+    </p>
   </details>
 
   <!-- GCD -->
@@ -287,64 +342,64 @@ public class Euclid {
 `}
 </code></pre>
 
+    <hr class="mt-4" />
+    <h4 class="font-semibold mt-3">
+      Runtime Analysis
+    </h4>
+    <ul class="list-disc ml-6 mt-2">
+      <li>
+        <b>Time Complexity:</b> O(log min(p,q))
+      </li>
+      <li>
+        <b>Space Complexity:</b> O(log min(p,q))
+      </li>
+    </ul>
     <p class="mt-2">
-      <b>Key Identity:</b>
-      gcd(p, q) = gcd(q, p % q)
+      Each step reduces the problem
+      using modulo. Shrinks
+      logarithmically.
     </p>
   </details>
 
-  <!-- Time Complexity -->
+  <!-- Time Complexity Videos -->
   <details
     class="mb-4 border rounded p-4"
   >
     <summary
       class="cursor-pointer font-semibold"
     >
-      Time Complexity of Recursion
+      Time Complexity of Recursive
+      Algorithms
     </summary>
 
-    <p>
-      Recursive complexity is often
-      expressed using recurrence
-      relations.
-    </p>
-
-    <div class="mt-4 space-y-4">
+    <div class="mt-4 space-y-6">
       <iframe
         width="560"
         height="315"
         src="https://www.youtube.com/embed/cBGLEa6WcrQ"
         frameborder="0"
-        allowfullscreen
-      >
-      </iframe>
+        allowfullscreen></iframe>
 
       <iframe
         width="560"
         height="315"
         src="https://www.youtube.com/embed/oZ0MP5euLQ0"
         frameborder="0"
-        allowfullscreen
-      >
-      </iframe>
+        allowfullscreen></iframe>
 
       <iframe
         width="560"
         height="315"
         src="https://www.youtube.com/embed/t4mwbA46KF8"
         frameborder="0"
-        allowfullscreen
-      >
-      </iframe>
+        allowfullscreen></iframe>
 
       <iframe
         width="560"
         height="315"
         src="https://www.youtube.com/embed/agy0GW9-uyM"
         frameborder="0"
-        allowfullscreen
-      >
-      </iframe>
+        allowfullscreen></iframe>
     </div>
   </details>
 
@@ -360,44 +415,16 @@ public class Euclid {
 
     <ul class="list-disc ml-6 mt-2">
       <li>
-        Barnett & Tongo,
-        <i
-          >Data Structures and
-          Algorithms: Annotated
-          Reference with Examples</i
-        >, Appendix C
+        Barnett & Tongo – Data
+        Structures and Algorithms
       </li>
       <li>
-        Robert Sedgewick & Kevin Wayne,
-        <i>Euclid.java</i>
+        Robert Sedgewick & Kevin Wayne –
+        Euclid.java
       </li>
       <li>
-        YouTube videos listed in Time
-        Complexity section
-      </li>
-    </ul>
-  </details>
-
-  <!-- Assignment -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Assignment & Discussion
-    </summary>
-
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        Continue working on Assignment 2
-      </li>
-      <li>
-        Post questions in Unit 6
-        Discussion
-      </li>
-      <li>
-        Share useful recursion resources
+        YouTube Recurrence Videos
+        (above)
       </li>
     </ul>
   </details>
