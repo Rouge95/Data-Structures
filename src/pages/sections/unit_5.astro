@@ -15,142 +15,6 @@ const unit = "Unit 5";
   </h1>
   <hr class="mb-6" />
 
-  <!-- Collision Resolution (Expanded & Applied) -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Collision Resolution Techniques
-      (Detailed)
-    </summary>
-
-    <p>
-      <b>Collision:</b> Two keys map to the
-      same index: h(k1) = h(k2). CRTs are
-      applied to resolve collisions at the
-      table index level.
-    </p>
-
-    <hr />
-
-    <h4 class="font-semibold mt-3">
-      1. Open Addressing
-    </h4>
-    <p>
-      All data stays inside the array.
-      If a slot is full, probe for
-      another.
-    </p>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        <b>Linear Probing</b>: index =
-        (hash_code + i) % m;
-        cache-friendly; weak: primary
-        clustering.
-      </li>
-      <li>
-        <b>Quadratic Probing</b>: index
-        = hash_code + c1·i + c2·i²;
-        reduces primary clustering;
-        weak: secondary clustering.
-      </li>
-      <li>
-        <b>Double Hashing</b>: index =
-        hash_code + i·hash2(key);
-        minimal clustering; more
-        computation.
-      </li>
-    </ul>
-
-    <hr />
-
-    <h4 class="font-semibold mt-3">
-      2. Separate Chaining
-    </h4>
-    <p>
-      Each slot stores multiple
-      elements. CRT manages the chain,
-      not the index.
-    </p>
-    <ul class="list-disc ml-6 mt-2">
-      <li>Linked list</li>
-      <li>List heads</li>
-      <li>
-        BST or dynamic array for long
-        chains
-      </li>
-    </ul>
-
-    <hr />
-
-    <h4 class="font-semibold mt-3">
-      3. Coalesced Hashing
-    </h4>
-    <p>
-      Hybrid of chaining + open
-      addressing. Colliding items are
-      linked inside the array.
-    </p>
-
-    <hr />
-
-    <h4 class="font-semibold mt-3">
-      4. Robin Hood Hashing
-    </h4>
-    <p>
-      During insert, the key with longer
-      probe distance swaps with the new
-      key to equalize probe lengths.
-    </p>
-
-    <hr />
-
-    <h4 class="font-semibold mt-3">
-      5. Cuckoo Hashing
-    </h4>
-    <p>
-      Two hash functions → two possible
-      locations. If occupied, displace
-      existing key. Lookup is O(1)
-      worst-case.
-    </p>
-
-    <hr />
-
-    <h4 class="font-semibold mt-3">
-      6. Hopscotch Hashing
-    </h4>
-    <p>
-      Maintains a small neighborhood
-      around each bucket using bitmaps.
-      Very cache-friendly and
-      concurrency-friendly.
-    </p>
-
-    <hr />
-
-    <h4 class="font-semibold mt-3">
-      7. Dynamic Resizing
-    </h4>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        Full resize: Allocate larger
-        table, rehash all elements.
-      </li>
-      <li>
-        Incremental resize: Gradually
-        move elements to avoid long
-        pauses.
-      </li>
-    </ul>
-    <p class="mt-2">
-      <b>Key Rule:</b> Keep load factor α
-      = n / m controlled for performance.
-    </p>
-  </details>
-
   <!-- Implementations -->
   <details
     class="mb-4 border rounded p-4"
@@ -158,14 +22,18 @@ const unit = "Unit 5";
     <summary
       class="cursor-pointer font-semibold"
     >
-      Hash Table Implementations in C
+      Hash Table Implementations
+      (Runnable)
     </summary>
 
-    <!-- Linear Probing -->
+    <!-- LINEAR PROBING -->
     <h4 class="font-semibold mt-3">
-      1. Open Addressing – Linear
-      Probing
+      1. Linear Probing
     </h4>
+
+    <h5 class="font-semibold mt-3">
+      C Implementation
+    </h5>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
 {`
@@ -176,9 +44,7 @@ const unit = "Unit 5";
 
 int table[TABLE_SIZE];
 
-int hash(int key) {
-    return key % TABLE_SIZE;
-}
+int hash(int key) { return key % TABLE_SIZE; }
 
 void init() {
     for(int i = 0; i < TABLE_SIZE; i++)
@@ -200,18 +66,100 @@ int search(int key) {
     int idx = hash(key);
     for(int i = 0; i < TABLE_SIZE; i++) {
         int probe = (idx + i) % TABLE_SIZE;
-        if(table[probe] == EMPTY) return 0;
-        if(table[probe] == key) return 1;
+        if(table[probe] == key)
+            return 1;
     }
     return 0;
 }
+
+int main() {
+    init();
+    insert(15);
+    insert(25);
+    insert(35);
+
+    printf("Search 25: %d\\n", search(25));
+    printf("Search 40: %d\\n", search(40));
+    return 0;
+}
+
+/*
+Output:
+Search 25: 1
+Search 40: 0
+*/
 `}
 </code></pre>
 
-    <!-- Separate Chaining -->
-    <h4 class="font-semibold mt-3">
+    <h5 class="font-semibold mt-3">
+      Java Implementation
+    </h5>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-java">
+{`
+public class LinearProbing {
+
+    static final int TABLE_SIZE = 10;
+    static final int EMPTY = -1;
+    static int[] table = new int[TABLE_SIZE];
+
+    static int hash(int key) {
+        return key % TABLE_SIZE;
+    }
+
+    static void init() {
+        for(int i = 0; i < TABLE_SIZE; i++)
+            table[i] = EMPTY;
+    }
+
+    static void insert(int key) {
+        int idx = hash(key);
+        for(int i = 0; i < TABLE_SIZE; i++) {
+            int probe = (idx + i) % TABLE_SIZE;
+            if(table[probe] == EMPTY) {
+                table[probe] = key;
+                return;
+            }
+        }
+    }
+
+    static boolean search(int key) {
+        int idx = hash(key);
+        for(int i = 0; i < TABLE_SIZE; i++) {
+            int probe = (idx + i) % TABLE_SIZE;
+            if(table[probe] == key)
+                return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        init();
+        insert(15);
+        insert(25);
+        insert(35);
+
+        System.out.println("Search 25: " + search(25));
+        System.out.println("Search 40: " + search(40));
+    }
+}
+
+/*
+Output:
+Search 25: true
+Search 40: false
+*/
+`}
+</code></pre>
+
+    <!-- SEPARATE CHAINING -->
+    <h4 class="font-semibold mt-6">
       2. Separate Chaining
     </h4>
+
+    <h5 class="font-semibold mt-3">
+      C Implementation
+    </h5>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
 {`
@@ -227,9 +175,7 @@ typedef struct Node {
 
 Node* table[TABLE_SIZE];
 
-int hash(int key) {
-    return key % TABLE_SIZE;
-}
+int hash(int key) { return key % TABLE_SIZE; }
 
 void insert(int key) {
     int idx = hash(key);
@@ -239,23 +185,92 @@ void insert(int key) {
     table[idx] = newNode;
 }
 
-Node* search(int key) {
+int search(int key) {
     int idx = hash(key);
     Node* curr = table[idx];
     while(curr) {
-        if(curr->key == key) return curr;
+        if(curr->key == key)
+            return 1;
         curr = curr->next;
     }
-    return NULL;
+    return 0;
 }
+
+int main() {
+    insert(15);
+    insert(25);
+    insert(35);
+
+    printf("Search 25: %d\\n", search(25));
+    printf("Search 99: %d\\n", search(99));
+    return 0;
+}
+
+/*
+Output:
+Search 25: 1
+Search 99: 0
+*/
 `}
 </code></pre>
 
-    <!-- Double Hashing -->
-    <h4 class="font-semibold mt-3">
-      3. Open Addressing – Double
-      Hashing
+    <h5 class="font-semibold mt-3">
+      Java Implementation
+    </h5>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-java">
+{`
+import java.util.LinkedList;
+
+public class SeparateChaining {
+
+    static final int TABLE_SIZE = 10;
+    static LinkedList<Integer>[] table = new LinkedList[TABLE_SIZE];
+
+    static int hash(int key) {
+        return key % TABLE_SIZE;
+    }
+
+    static void init() {
+        for(int i = 0; i < TABLE_SIZE; i++)
+            table[i] = new LinkedList<>();
+    }
+
+    static void insert(int key) {
+        table[hash(key)].add(key);
+    }
+
+    static boolean search(int key) {
+        return table[hash(key)].contains(key);
+    }
+
+    public static void main(String[] args) {
+        init();
+        insert(15);
+        insert(25);
+        insert(35);
+
+        System.out.println("Search 25: " + search(25));
+        System.out.println("Search 99: " + search(99));
+    }
+}
+
+/*
+Output:
+Search 25: true
+Search 99: false
+*/
+`}
+</code></pre>
+
+    <!-- DOUBLE HASHING -->
+    <h4 class="font-semibold mt-6">
+      3. Double Hashing
     </h4>
+
+    <h5 class="font-semibold mt-3">
+      C Implementation
+    </h5>
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
 {`
@@ -277,6 +292,7 @@ void init() {
 void insert(int key) {
     int idx = hash1(key);
     int step = hash2(key);
+
     for(int i = 0; i < TABLE_SIZE; i++) {
         int probe = (idx + i * step) % TABLE_SIZE;
         if(table[probe] == EMPTY) {
@@ -289,50 +305,96 @@ void insert(int key) {
 int search(int key) {
     int idx = hash1(key);
     int step = hash2(key);
+
     for(int i = 0; i < TABLE_SIZE; i++) {
         int probe = (idx + i * step) % TABLE_SIZE;
-        if(table[probe] == EMPTY) return 0;
-        if(table[probe] == key) return 1;
+        if(table[probe] == key)
+            return 1;
     }
     return 0;
 }
+
+int main() {
+    init();
+    insert(15);
+    insert(25);
+    insert(35);
+
+    printf("Search 35: %d\\n", search(35));
+    printf("Search 100: %d\\n", search(100));
+    return 0;
+}
+
+/*
+Output:
+Search 35: 1
+Search 100: 0
+*/
 `}
 </code></pre>
-  </details>
 
-  <!-- Performance Summary -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Performance Summary
-    </summary>
-    <ul class="list-disc ml-6 mt-2">
-      <li>
-        Separate chaining: Average O(1),
-        worst O(n)
-      </li>
-      <li>
-        Open addressing: O(1) if α low
-      </li>
-      <li>
-        Cuckoo hashing: O(1) worst-case
-        lookup
-      </li>
-      <li>
-        Robin Hood: Lower variance in
-        probe length
-      </li>
-      <li>
-        High load factor → exponential
-        collision growth
-      </li>
-    </ul>
-    <p class="mt-2">
-      <b>Exam Insight:</b> Always relate performance
-      to load factor (α).
-    </p>
+    <h5 class="font-semibold mt-3">
+      Java Implementation
+    </h5>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-java">
+{`
+public class DoubleHashing {
+
+    static final int TABLE_SIZE = 10;
+    static final int EMPTY = -1;
+    static int[] table = new int[TABLE_SIZE];
+
+    static int hash1(int key) { return key % TABLE_SIZE; }
+    static int hash2(int key) { return 1 + (key % (TABLE_SIZE - 1)); }
+
+    static void init() {
+        for(int i = 0; i < TABLE_SIZE; i++)
+            table[i] = EMPTY;
+    }
+
+    static void insert(int key) {
+        int idx = hash1(key);
+        int step = hash2(key);
+
+        for(int i = 0; i < TABLE_SIZE; i++) {
+            int probe = (idx + i * step) % TABLE_SIZE;
+            if(table[probe] == EMPTY) {
+                table[probe] = key;
+                return;
+            }
+        }
+    }
+
+    static boolean search(int key) {
+        int idx = hash1(key);
+        int step = hash2(key);
+
+        for(int i = 0; i < TABLE_SIZE; i++) {
+            int probe = (idx + i * step) % TABLE_SIZE;
+            if(table[probe] == key)
+                return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        init();
+        insert(15);
+        insert(25);
+        insert(35);
+
+        System.out.println("Search 35: " + search(35));
+        System.out.println("Search 100: " + search(100));
+    }
+}
+
+/*
+Output:
+Search 35: true
+Search 100: false
+*/
+`}
+</code></pre>
   </details>
 </BaseLayout>

@@ -14,60 +14,6 @@ const unit = "Unit 3";
   </h1>
   <hr class="mb-6" />
 
-  <!-- Skip List Overview -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      Pseudocode: Skip List
-    </summary>
-    <p>
-      <i
-        >The probability factor controls
-        how tall nodes become. In a skip
-        list: Every node starts at level
-        0. It may get promoted to higher
-        levels. Promotion happens
-        randomly. P determines how often
-        that promotion happens.</i
-      >
-    </p>
-    <hr />
-    <p>
-      Level 3: 20 ─────────────► 40 <br
-      />
-      Level 2: 20 ─────────────► 40 <br
-      />
-      Level 1: 20 ──► 30 ─────► 40 <br
-      />
-      Level 0: 20 ──► 30 ─────► 40 <br
-      />Now: <br />20.forward[3] → 40 <br
-      />20.forward[2] → 40 20.forward[1]
-      → 30<br /> 20.forward[0] → 30<br
-      />
-    </p>
-    <p>
-      randomLevel():<br />
-      Start at level 0 Repeat:<br /> Flip
-      a biased coin with probability P <br
-      />If it succeeds <br />AND we are
-      below MAX_LEVEL: <br />increase
-      level <br />Otherwise: <br />stop
-      Return level
-    </p>
-
-    <hr /><br />
-    <iframe
-      width="315"
-      height="576"
-      src="https://www.youtube.com/embed/ypod5jeYzAU"
-      title="Skip List | Set 1 (Introduction) | GeeksforGeeks"
-      frameborder="0"
-      allowfullscreen></iframe>
-  </details>
-
   <!-- C Implementation -->
   <details
     class="mb-4 border rounded p-4"
@@ -75,8 +21,10 @@ const unit = "Unit 3";
     <summary
       class="cursor-pointer font-semibold"
     >
-      C Implementation - Skip List
+      C Implementation - Skip List (With
+      Runtime)
     </summary>
+
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-c">
 {`
@@ -84,76 +32,62 @@ const unit = "Unit 3";
 #include <stdio.h>
 #include <time.h>
 
-#define MAX_LEVEL 6      // Maximum height of the skip list
-#define P 0.5            // Probability factor for level generation
+#define MAX_LEVEL 6
+#define P 0.5
 
-// Node structure: contains value and forward pointers for each level
 typedef struct Node {
     int value;
-    struct Node* forward[MAX_LEVEL + 1]; //! Each node stores pointers to the next greater value at that level.
+    struct Node* forward[MAX_LEVEL + 1];
 } Node;
 
-// SkipList structure: tracks current highest level and header node
 typedef struct {
-    int level;           // Current highest level in use
-    Node* header;        // Sentinel head node
+    int level;
+    Node* header;
 } SkipList;
 
-// Randomly generate a level using probability P
 int randomLevel() {
     int level = 0;
     while ((rand() / (double)RAND_MAX) < P && level < MAX_LEVEL)
-        level++;         // Increase level with probability P
+        level++;
     return level;
 }
 
-// Create a new node with given value
-Node* createNode(int value, int level) {
+Node* createNode(int value) {
     Node* node = (Node*)malloc(sizeof(Node));
     node->value = value;
-
-    // Initialize all forward pointers to NULL
     for(int i = 0; i <= MAX_LEVEL; i++)
         node->forward[i] = NULL;
-
     return node;
 }
 
-// Initialize skip list
 void initSkipList(SkipList* list) {
-    list->level = 0;                         // Start at level 0
-    list->header = createNode(-1, MAX_LEVEL); // Sentinel node
+    list->level = 0;
+    list->header = createNode(-1);
 }
 
-// Insert value into skip list
 void insert(SkipList* list, int value) {
-    Node* update[MAX_LEVEL + 1]; // Previous nodes to rewire into. If we stored copies of nodes, modifying them wouldn’t affect the list.
+    Node* update[MAX_LEVEL + 1];
     Node* x = list->header;
 
-    // Start from highest level and move down
     for(int i = list->level; i >= 0; i--) {
         while(x->forward[i] && x->forward[i]->value < value)
-            x = x->forward[i];   // Move forward at current level
-        update[i] = x;           // Save node before insertion point
+            x = x->forward[i];
+        update[i] = x;
     }
 
     x = x->forward[0];
 
-    // Insert only if value not already present
     if(x == NULL || x->value != value) {
         int lvl = randomLevel();
 
-        // If new level is higher we plan to wire a new header of that new level
         if(lvl > list->level) {
-            for(int i = list->level + 1; i <= lvl; i++) 
+            for(int i = list->level + 1; i <= lvl; i++)
                 update[i] = list->header;
             list->level = lvl;
         }
 
-        // Create new node
-        x = createNode(value, lvl);
+        x = createNode(value);
 
-        // Re-link pointers at each level
         for(int i = 0; i <= lvl; i++) {
             x->forward[i] = update[i]->forward[i];
             update[i]->forward[i] = x;
@@ -161,11 +95,9 @@ void insert(SkipList* list, int value) {
     }
 }
 
-// Search for a value
 int search(SkipList* list, int value) {
     Node* x = list->header;
 
-    // Traverse from highest level down
     for(int i = list->level; i >= 0; i--) {
         while(x->forward[i] && x->forward[i]->value < value)
             x = x->forward[i];
@@ -173,9 +105,40 @@ int search(SkipList* list, int value) {
 
     x = x->forward[0];
 
-    // Return 1 if found, 0 otherwise
     return (x && x->value == value);
 }
+
+/* ===========================
+   MAIN RUNTIME EXAMPLE
+   =========================== */
+
+int main() {
+    srand(time(NULL));
+
+    SkipList list;
+    initSkipList(&list);
+
+    printf("Inserting: 20, 30, 40\\n");
+    insert(&list, 20);
+    insert(&list, 30);
+    insert(&list, 40);
+
+    printf("Search 30: %s\\n",
+        search(&list, 30) ? "Found" : "Not Found");
+
+    printf("Search 25: %s\\n",
+        search(&list, 25) ? "Found" : "Not Found");
+
+    return 0;
+}
+
+/*
+Expected Output (example):
+
+Inserting: 20, 30, 40
+Search 30: Found
+Search 25: Not Found
+*/
 `}
 </code></pre>
   </details>
@@ -188,62 +151,57 @@ int search(SkipList* list, int value) {
       class="cursor-pointer font-semibold"
     >
       Java Implementation - Skip List
+      (With Runtime)
     </summary>
+
     <pre
       class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-java">
 {`
 import java.util.Random;
 
-// Skip List implementation with probabilistic balancing
-class SkipList {
+public class SkipList {
 
-    // Node class stores value and forward references
     static class Node {
         int value;
         Node[] forward;
 
         Node(int value, int level) {
             this.value = value;
-            forward = new Node[level + 1]; // Allocate levels
+            forward = new Node[level + 1];
         }
     }
 
-    private static final int MAX_LEVEL = 6; // Max height
-    private static final double P = 0.5;    // Probability factor
+    private static final int MAX_LEVEL = 6;
+    private static final double P = 0.5;
 
-    private final Node header = new Node(-1, MAX_LEVEL); // Sentinel
-    private int level = 0;                                 // Current highest level
+    private final Node header = new Node(-1, MAX_LEVEL);
+    private int level = 0;
     private final Random rand = new Random();
 
-    // Generate random level
     private int randomLevel() {
         int lvl = 0;
         while(rand.nextDouble() < P && lvl < MAX_LEVEL)
-            lvl++;  // Increase height with probability P
+            lvl++;
         return lvl;
     }
 
-    // Insert a value
     public void insert(int value) {
         Node[] update = new Node[MAX_LEVEL + 1];
         Node x = header;
 
-        // Traverse from top level down
         for(int i = level; i >= 0; i--) {
             while(x.forward[i] != null &&
                   x.forward[i].value < value)
                 x = x.forward[i];
 
-            update[i] = x; // Save path
+            update[i] = x;
         }
 
         x = x.forward[0];
 
-        // Insert only if not duplicate
         if(x == null || x.value != value) {
             int lvl = randomLevel();
 
-            // If new level exceeds current, adjust header references
             if(lvl > level) {
                 for(int i = level + 1; i <= lvl; i++)
                     update[i] = header;
@@ -252,7 +210,6 @@ class SkipList {
 
             Node newNode = new Node(value, lvl);
 
-            // Re-link pointers
             for(int i = 0; i <= lvl; i++) {
                 newNode.forward[i] = update[i].forward[i];
                 update[i].forward[i] = newNode;
@@ -260,11 +217,9 @@ class SkipList {
         }
     }
 
-    // Search for a value
     public boolean search(int value) {
         Node x = header;
 
-        // Traverse levels top-down
         for(int i = level; i >= 0; i--) {
             while(x.forward[i] != null &&
                   x.forward[i].value < value)
@@ -275,7 +230,34 @@ class SkipList {
 
         return x != null && x.value == value;
     }
+
+    /* ===========================
+       MAIN RUNTIME EXAMPLE
+       =========================== */
+
+    public static void main(String[] args) {
+        SkipList list = new SkipList();
+
+        System.out.println("Inserting: 20, 30, 40");
+        list.insert(20);
+        list.insert(30);
+        list.insert(40);
+
+        System.out.println("Search 30: " +
+            (list.search(30) ? "Found" : "Not Found"));
+
+        System.out.println("Search 25: " +
+            (list.search(25) ? "Found" : "Not Found"));
+    }
 }
+
+/*
+Expected Output (example):
+
+Inserting: 20, 30, 40
+Search 30: Found
+Search 25: Not Found
+*/
 `}
 </code></pre>
   </details>
