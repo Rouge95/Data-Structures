@@ -1,327 +1,457 @@
----
-import BaseLayout from "../../layouts/BaseLayout.astro";
+# Algorithms and Data Structures
 
-const pageTitle =
-  "A&DS S01E01. Algorithms. Time Complexity & Merge Sort.";
-const unit = "1.1";
+## Tasks for Lesson 1 — With Full Solutions
+
 ---
 
-<BaseLayout
-  title={pageTitle}
-  unit={unit}
->
-  <h1 class="text-3xl font-bold mb-4">
-    {pageTitle}
-  </h1>
-  <hr class="mb-6" />
+## **1.1. For each algorithm below calculate its time complexity.**
 
-  <!-- 1.1 Time Complexity -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.1 Time Complexity Analysis
-    </summary>
+### **a)**
 
-    <p class="mt-2 font-semibold">
-      Question a)
-    </p>
-    <p>
-      for i = 1..n <br />
-      &nbsp;&nbsp;for j = 1 while j² &lt;
-      i
-    </p>
-    <p>
-      For fixed i, j runs until √i. <br
-      />
-      Total work: Σ√i from 1 to n ≈ n^(3/2).
-      <br />
-      <strong>Answer:</strong> O(n^(3/2))
-    </p>
+```python
+for i in range(n):
+    j = 0
+    while j * j < i:
+        j += 1
+```
 
-    <p class="mt-4 font-semibold">
-      Question b)
-    </p>
-    <p>
-      for i = 1..n <br />
-      &nbsp;&nbsp;j = n <br />
-      &nbsp;&nbsp;while j &gt; 1: j = j/2
-    </p>
-    <p>
-      Inner loop runs log n times. <br
-      />
-      Outer loop runs n times. <br />
-      <strong>Answer:</strong> O(n log n)
-    </p>
+### **Solution**
 
-    <p class="mt-4 font-semibold">
-      Question c)
-    </p>
-    <p>f(n) = 5 f(n/3) + O(1)</p>
-    <p>
-      Use Master Theorem. <br />
-      a = 5, b = 3 → n^(log₃5) ≈ n^1.46 <br
-      />
-      <strong>Answer:</strong> O(n^1.46)
-    </p>
+For each fixed ( i ), the condition is:
 
-    <p class="mt-4 font-semibold">
-      Question d)
-    </p>
-    <p>f(n) = 2 f(n/3) + O(1)</p>
-    <p>
-      a = 2, b = 3 → n^(log₃2) ≈ n^0.63 <br
-      />
-      <strong>Answer:</strong> O(n^0.63)
-    </p>
-  </details>
+[
+j^2 < i
+]
 
-  <!-- 1.2 -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.2 Prove T(n) = Ω(n log n)
-    </summary>
+So ( j ) increases up to approximately ( \sqrt{i} ).
+Thus, the inner loop runs ( O(\sqrt{i}) ) times.
 
-    <p class="mt-2">
-      Given: T(n) = 2T(n/2) + n
-    </p>
+Total work:
 
-    <p>
-      Expand recurrence tree: <br />
-      Level 0: n <br />
-      Level 1: 2 × n/2 = n <br />
-      Level 2: 4 × n/4 = n <br />
-      Each level contributes n.
-    </p>
+[
+\sum_{i=1}^{n} \sqrt{i}
+\approx \int_1^n \sqrt{x} dx
+= \frac{2}{3} n^{3/2}
+]
 
-    <p>
-      Height = log n levels. <br />
-      Total work = n log n.
-    </p>
+[
+\boxed{O(n^{3/2})}
+]
 
-    <strong>Conclusion:</strong> Ω(n log n)
-  </details>
+---
 
-  <!-- 1.3 -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.3 Prove T(n) = O(n log n)
-    </summary>
+### **b)**
 
-    <p class="mt-2">
-      T(n) = 2T(n/2 + 20) + n
-    </p>
+```python
+for i in range(n):
+    j = i
+    while j > 0:
+        j = j // 2
+```
 
-    <p>
-      The +20 is constant shift. <br />
-      It does not change asymptotic depth.
-      <br />
-      Recurrence behaves like 2T(n/2) + n.
-    </p>
+### **Solution**
 
-    <strong>Answer:</strong> O(n log n)
-  </details>
+Each iteration halves ( j ).
+So the inner loop runs ( O(\log i) ) times.
 
-  <!-- 1.4 -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.4 T(n) = log n · T(n/log n) + n
-    </summary>
+Total work:
 
-    <p class="mt-2">
-      Each level shrinks problem to
-      n/log n. <br />
-      Depth becomes log n / log log n. <br
-      />
-      Each level costs n.
-    </p>
+[
+\sum_{i=1}^{n} \log i = O(n \log n)
+]
 
-    <strong>Answer:</strong> O(n log n)
-  </details>
+[
+\boxed{O(n \log n)}
+]
 
-  <!-- 1.5 -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.5 T(n) = 2T(√n) + 1
-    </summary>
+---
 
-    <p class="mt-2">
-      Let n = 2^m. <br />
-      Then √n = 2^(m/2).
-    </p>
+### **c)**
 
-    <p>
-      Define S(m) = T(2^m). <br />
-      Recurrence becomes S(m) = 2S(m/2) +
-      1.
-    </p>
+```python
+def f(n):
+    if n == 0:
+        return 1
+    else:
+        return 5 * f(n // 3)
+```
 
-    <p>
-      This solves to O(m). <br />
-      Since m = log n:
-    </p>
+### **Solution**
 
-    <strong>Answer:</strong> O(log n)
-  </details>
+Recurrence:
 
-  <!-- Two pointer -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.6–1.10 Two-Pointer Problems
-    </summary>
+[
+T(n) = T(n/3) + O(1)
+]
 
-    <p class="mt-2">
-      Assume arrays are sorted.
-    </p>
+The recursion depth is:
 
-    <p>
-      <strong
-        >1.6 Common element:</strong
-      ><br />
-      Move smaller pointer forward until equal
-      found. O(n).
-    </p>
+[
+\log_3 n
+]
 
-    <p>
-      <strong>1.7 Min |ai - bj|:</strong
-      ><br />
-      Always move pointer with smaller value.
-      O(n).
-    </p>
+[
+\boxed{O(\log n)}
+]
 
-    <p>
-      <strong>1.8 ai + bj = S:</strong
-      ><br />
-      i = 0, j = n-1. <br />
-      If sum too small → i++ <br />
-      If sum too large → j-- <br />
-      O(n).
-    </p>
+---
 
-    <p>
-      <strong>1.9 Count ai = bj:</strong
-      ><br />
-      Merge-style traversal. O(n).
-    </p>
+### **d)**
 
-    <p>
-      <strong
-        >1.10 Count ai &gt; bj:</strong
-      ><br />
-      When ai &gt; bj, add count of remaining
-      smaller b’s. O(n).
-    </p>
-  </details>
+```python
+def f(n):
+    if n == 0:
+        return 1
+    else:
+        return f(n // 3) + f(n // 3)
+```
 
-  <!-- Inversions -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.11 Count Inversions (O(n log n))
-    </summary>
+### **Solution**
 
-    <p class="mt-2">
-      Use modified merge sort.
-    </p>
+Recurrence:
 
-    <p>
-      During merge: <br />
-      If right element placed before left
-      → <br />
-      Add remaining left elements count.
-    </p>
+[
+T(n) = 2T(n/3) + O(1)
+]
 
-    <strong>Time:</strong> O(n log n)
-  </details>
+Using Master Theorem:
 
-  <!-- Stability -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.12 Why Merge Sort Is Stable
-    </summary>
+[
+T(n) = O(n^{\log_3 2})
+]
 
-    <p class="mt-2">
-      When elements are equal, take from
-      left subarray first.
-    </p>
+Since ( \log_3 2 \approx 0.63 ),
 
-    <p>
-      This preserves original order.
-    </p>
-  </details>
+[
+\boxed{O(n^{0.63})}
+]
 
-  <!-- Single array -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.13 Merge Sort with One Extra
-      Array
-    </summary>
+---
 
-    <p class="mt-2">
-      Allocate temp[n] once.
-    </p>
+## **1.2. Prove using mathematical induction that if**
 
-    <p>
-      During merge: <br />
-      Copy into temp → copy back.
-    </p>
+[
+T(n) = 2T(n/2) + n
+]
+then
+[
+T(n) = \Omega(n \log n)
+]
 
-    <p>Avoids repeated allocations.</p>
-  </details>
+### **Solution**
 
-  <!-- Iterative -->
-  <details
-    class="mb-4 border rounded p-4"
-  >
-    <summary
-      class="cursor-pointer font-semibold"
-    >
-      1.14 Iterative Merge Sort
-    </summary>
+**Induction hypothesis:**
+Assume
 
-    <p class="mt-2">
-      Bottom-up approach:
-    </p>
+[
+T(k) \ge c k \log k
+\quad \text{for all } k < n
+]
 
-    <p>
-      Merge size 1 → 2 → 4 → 8 → ... <br
-      />
-      Until size ≥ n.
-    </p>
+Then:
 
-    <p>Eliminates recursion stack.</p>
-  </details>
-</BaseLayout>
+[
+T(n) = 2T(n/2) + n
+]
+
+[
+\ge 2 \cdot c \frac{n}{2} \log\left(\frac{n}{2}\right) + n
+]
+
+[
+= c n (\log n - 1) + n
+]
+
+[
+= c n \log n + (1 - c)n
+]
+
+Choose ( c \le 1 ). Then:
+
+[
+T(n) \ge c n \log n
+]
+
+[
+\boxed{\Omega(n \log n)}
+]
+
+---
+
+## **1.3. Prove using mathematical induction that if**
+
+[
+T(n) = 2T(n/2 + 20) + n
+]
+then
+[
+T(n) = O(n \log n)
+]
+
+### **Solution**
+
+The constant +20 does not change asymptotic behavior.
+
+For sufficiently large ( n ):
+
+[
+T(n) \le 2T(n/2) + cn
+]
+
+This matches the standard merge sort recurrence.
+
+[
+\boxed{O(n \log n)}
+]
+
+---
+
+## **1.4. Prove using mathematical induction that if**
+
+[
+T(n) = \log n \cdot T(n/\log n) + n
+]
+then
+[
+T(n) = O(n \log n)
+]
+
+### **Solution**
+
+Assume:
+
+[
+T(k) \le c k \log k
+]
+
+Then:
+
+[
+T(n)
+= \log n \cdot T(n/\log n) + n
+]
+
+[
+\le \log n \cdot c \frac{n}{\log n}
+\log\left(\frac{n}{\log n}\right) + n
+]
+
+[
+= c n (\log n - \log\log n) + n
+]
+
+For sufficiently large ( n ), this is bounded by:
+
+[
+c n \log n
+]
+
+[
+\boxed{O(n \log n)}
+]
+
+---
+
+## **1.5. Prove using mathematical induction that if**
+
+[
+T(n) = 2T(\sqrt{n}) + 1
+]
+then
+[
+T(n) = O(\log n)
+]
+
+### **Solution**
+
+Let:
+
+[
+n = 2^m
+]
+
+Then:
+
+[
+\sqrt{n} = 2^{m/2}
+]
+
+Define:
+
+[
+S(m) = T(2^m)
+]
+
+Recurrence becomes:
+
+[
+S(m) = 2S(m/2) + 1
+]
+
+This solves to:
+
+[
+S(m) = O(m)
+]
+
+Since ( m = \log n ),
+
+[
+\boxed{O(\log n)}
+]
+
+---
+
+## **1.6. You are given two arrays a and b sorted in non-decreasing order. Determine if there is a number that occurs in both arrays. Time O(n).**
+
+### **Solution**
+
+Use two pointers:
+
+- If ( a[i] = b[j] ) → return true
+- If ( a[i] < b[j] ) → increment ( i )
+- Else increment ( j )
+
+Each element is visited at most once.
+
+[
+\boxed{O(n)}
+]
+
+---
+
+## **1.7. You are given two arrays a and b sorted in non-decreasing order. Find i and j such that |ai − bj| is minimal. Time O(n).**
+
+### **Solution**
+
+Use two pointers:
+
+- Compute difference
+- Move pointer of smaller element
+
+Each step reduces search space.
+
+[
+\boxed{O(n)}
+]
+
+---
+
+## **1.8. You are given two arrays a and b sorted in non-decreasing order and a number S. Find i and j such that ai + bj = S. Time O(n).**
+
+### **Solution**
+
+Use:
+
+- ( i = 0 )
+- ( j = n-1 )
+
+If sum < S → increment ( i )
+If sum > S → decrement ( j )
+
+[
+\boxed{O(n)}
+]
+
+---
+
+## **1.9. You are given two arrays a and b sorted in non-decreasing order. Find the number of pairs (i, j) such that ai = bj. Time O(n).**
+
+### **Solution**
+
+Traverse like merge:
+
+- If equal → count duplicates
+- Move both pointers
+
+[
+\boxed{O(n)}
+]
+
+---
+
+## **1.10. You are given two arrays a and b sorted in non-decreasing order. Find the number of pairs (i, j) such that ai > bj. Time O(n).**
+
+### **Solution**
+
+Maintain pointer ( j ) in array b.
+
+For each ( a[i] ):
+
+- Move ( j ) while ( b[j] < a[i] )
+- Add ( j ) to count
+
+[
+\boxed{O(n)}
+]
+
+---
+
+## **1.11. Given an array a. The pair (i, j) such that i < j and ai > aj is called inversion. Find the number of inversions in array a. Time O(n log n).**
+
+### **Solution**
+
+Use modified merge sort:
+
+- Count inversions in left half
+- Count inversions in right half
+- During merge:
+  - If right[j] < left[i]
+  - Add remaining left elements to inversion count
+
+[
+\boxed{O(n \log n)}
+]
+
+---
+
+## **1.12. Show that, with the correct implementation, merge sort is stable.**
+
+### **Solution**
+
+During merge:
+
+If elements are equal, choose the element from the left subarray first.
+
+Thus relative order of equal elements is preserved.
+
+Merge sort is **stable**.
+
+---
+
+## **1.13. Show how to implement merge sort with a single additional array of size n.**
+
+### **Solution**
+
+- Allocate one auxiliary array of size ( n ).
+- Pass it to recursive calls.
+- During merge:
+  - Copy merged segment into auxiliary array
+  - Copy back to original array
+
+No new arrays per recursion.
+
+---
+
+## **1.14. Show how to implement merge sort without recursion.**
+
+### **Solution**
+
+Use bottom-up merge sort:
+
+- Start with subarrays of size 1.
+- Merge adjacent subarrays.
+- Double size each iteration: 1, 2, 4, 8, …
+
+Stop when size ≥ n.
+
+Time complexity remains:
+
+[
+\boxed{O(n \log n)}
+]
+
+---
+
+**End of Lesson 1**
+Page 1 of 1
