@@ -1,0 +1,255 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle =
+  "A&DS S01E01. Algorithms. Time complexity. Merge sort.";
+const unit = "1.1";
+---
+
+<BaseLayout
+  title={pageTitle}
+  unit={unit}
+>
+  <h1 class="text-3xl font-bold mb-4">
+    {pageTitle}
+  </h1>
+  <hr class="mb-6" />
+
+  <!-- 1.1 Algorithms Time Complexity -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+      >1.1 For each algorithm below,
+      calculate its time complexity</summary
+    >
+
+    <h2>a)</h2>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-python">
+for i in range(n):
+    j = 0
+    while j * j &lt; i:
+        j += 1
+# Solution:
+# Inner loop: j &lt; sqrt(i) → O(sqrt(i))
+# Total: sum O(sqrt(i)) from i=0..n ≈ O(n^(3/2))
+    </code></pre>
+
+    <h2>b)</h2>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-python">
+for i in range(n):
+    j = i
+    while j &gt; 0:
+        j = j // 2
+# Solution:
+# Inner loop: O(log i)
+# Total sum over i=1..n → O(n log n)
+    </code></pre>
+
+    <h2>c)</h2>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-python">
+def f(n):
+    if n == 0:
+        return 1
+    else:
+        return 5 * f(n // 3)
+# Solution:
+# Recurrence: T(n) = T(n/3) + O(1)
+# Time complexity: O(log n)
+    </code></pre>
+
+    <h2>d)</h2>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-python">
+def f(n):
+    if n == 0:
+        return 1
+    else:
+        return f(n // 3) + f(n // 3)
+# Solution:
+# Recurrence: T(n) = 2*T(n/3) + O(1)
+# Time complexity: O(n^log3(2)) ≈ O(n^0.63)
+    </code></pre>
+  </details>
+
+  <!-- 1.2 Induction Proofs -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+      >1.2 – 1.5 Time complexity proofs
+      using induction</summary
+    >
+
+    <h2>
+      1.2 Prove T(n) = 2T(n/2) + n ⇒
+      T(n) = Ω(n log n)
+    </h2>
+    <p>
+      Solution: Base case: n = 1 → T(1)
+      = 1<br />
+      Induction hypothesis: Assume T(k) ≥
+      c k log k for k &lt; n<br />
+      Inductive step:
+      <br />
+      T(n) = 2 T(n/2) + n ≥ 2 * c * (n/2)
+      * log(n/2) + n = c n log n - c n + n
+      → choose c ≤ 1<br />
+      ✅ Conclusion: T(n) = Ω(n log n)
+    </p>
+
+    <h2>
+      1.3 Prove T(n) = 2T(n/2 + 20) + n
+      ⇒ T(n) = O(n log n)
+    </h2>
+    <p>
+      Solution: +20 does not change
+      asymptotics; recursive expansion
+      yields O(n log n)
+    </p>
+
+    <h2>
+      1.4 Prove T(n) = log n · T(n / log
+      n) + n ⇒ T(n) = O(n log n)
+    </h2>
+    <p>
+      Solution: Each recursion reduces
+      problem size multiplicatively;
+      logarithmic factor multiplies log
+      n times → total O(n log n)
+    </p>
+
+    <h2>
+      1.5 Prove T(n) = 2T(√n) + 1 ⇒ T(n)
+      = O(log n)
+    </h2>
+    <p>
+      Solution: Let n = 2^k → S(k) = 2
+      S(k/2) + 1 → solves to O(k) =
+      O(log n)
+    </p>
+  </details>
+
+  <!-- 1.6 – 1.10 Arrays problems -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+      >1.6 – 1.10 Array tasks</summary
+    >
+
+    <h2>
+      1.6 Determine if a number occurs
+      in both arrays (sorted)
+    </h2>
+    <pre
+      class="bg-gray-100 p-2 rounded overflow-x-auto text-sm"><code class="language-python">
+i = j = 0
+while i &lt; len(a) and j &lt; len(b):
+    if a[i] == b[j]:
+        return True
+    elif a[i] &lt; b[j]:
+        i += 1
+    else:
+        j += 1
+# Complexity: O(n)
+    </code></pre>
+
+    <h2>
+      1.7 Find i,j such that |ai - bj|
+      is minimal
+    </h2>
+    <p>
+      Two-pointer approach, advance
+      pointer of smaller element → O(n)
+    </p>
+
+    <h2>
+      1.8 Find i,j such that ai + bj = S
+    </h2>
+    <p>
+      Two-pointer: start at a[0], b[-1],
+      move left/right to adjust sum →
+      O(n)
+    </p>
+
+    <h2>
+      1.9 Count pairs i,j such that ai =
+      bj
+    </h2>
+    <p>
+      Two-pointer approach counting
+      duplicates → O(n)
+    </p>
+
+    <h2>
+      1.10 Count pairs i,j such that ai
+      &gt; bj
+    </h2>
+    <p>
+      Two-pointer, increment count when
+      a[i] &gt; b[j] → O(n)
+    </p>
+  </details>
+
+  <!-- 1.11 Inversions -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+      >1.11 Count inversions in an array</summary
+    >
+    <p>
+      Solution: Use merge sort; while
+      merging, count elements remaining
+      in left array when taking from
+      right → O(n log n)
+    </p>
+  </details>
+
+  <!-- 1.12 – 1.14 Merge sort -->
+  <details
+    class="mb-4 border rounded p-4"
+  >
+    <summary
+      class="cursor-pointer font-semibold"
+      >1.12 – 1.14 Merge sort tasks</summary
+    >
+
+    <h2>
+      1.12 Show merge sort is stable
+    </h2>
+    <p>
+      Solution: Pick left element before
+      right when equal during merge →
+      preserves order → stable
+    </p>
+
+    <h2>
+      1.13 Merge sort using single
+      auxiliary array
+    </h2>
+    <p>
+      Solution: Allocate tmp[n] once and
+      reuse during all merges → memory
+      efficient
+    </p>
+
+    <h2>
+      1.14 Merge sort without recursion
+    </h2>
+    <p>
+      Solution: Iterative bottom-up
+      merge sort: merge subarrays of
+      size 1, 2, 4… doubling each step →
+      O(n log n)
+    </p>
+  </details>
+</BaseLayout>
