@@ -1,3 +1,12 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle =
+"A&DS S01E01. Algorithms. Time Complexity & Merge Sort.";
+const unit = "1.1";
+---
+
+<BaseLayout title={pageTitle} unit={unit}>
 # Algorithms and Data Structures
 
 ## Tasks for Lesson 1 — With Full Solutions
@@ -455,3 +464,5 @@ Time complexity remains:
 
 **End of Lesson 1**
 Page 1 of 1
+
+</BaseLayout>
